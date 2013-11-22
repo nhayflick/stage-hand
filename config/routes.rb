@@ -1,6 +1,12 @@
 StageHand::Application.routes.draw do
   devise_for :users
-  resources :listings
+  resources :listings do
+    resources :requests
+  end
+  # Not working currently:
+  # resources :users do
+  #   resources :requests
+  # end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

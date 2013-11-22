@@ -11,12 +11,17 @@ class ListingsController < ApplicationController
   # GET /listings/1
   # GET /listings/1.json
   def show
+    if current_user != @listing.user
+      if current_user.requests.where(listing_id: @listing.id).take.nil?
+        @request = @listing.requests.build
+      else
+        @request = current_user.requests.find_by! listing_id: @listing.id
+      end
+    end
   end
 
   # GET /listings/new
   def new
-    puts "hi"
-    puts current_user
     @listing = Listing.new
   end
 

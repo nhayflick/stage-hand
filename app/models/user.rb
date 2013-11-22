@@ -7,4 +7,5 @@ class User < ActiveRecord::Base
   validates :username, length: { in: 3..30 }
 
   has_many :listings
+  has_many :requests
 end

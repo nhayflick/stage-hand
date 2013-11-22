@@ -25,5 +25,20 @@
   <%= @listing.description %>
 </p>
 
+<p>
+  <% if @request %>
+    <% if @request.user_id.nil? %>
+      <strong>Request this rental:</strong>
+      <%= form_for [@listing, @request] do |f| %>
+          <%= f.label :note %>
+          <%= f.text_field :note %>
+          <%= f.submit 'Send' %>
+      <% end %>
+    <% else %>
+      <strong> Request Sent </strong>
+    <% end %>
+  <% end %>
+</p>
+
 <%= link_to 'Edit', edit_listing_path(@listing) %> |
 <%= link_to 'Back', listings_path %>
