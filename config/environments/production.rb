@@ -1,7 +1,7 @@
 StageHand::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  # Code is not reloaded between requests.
+  # Code is not reloaded between bookings.
   config.cache_classes = true
 
   # Eager load code on boot. This eager loads most of Rails and
@@ -11,7 +11,7 @@ StageHand::Application.configure do
   config.eager_load = true
 
   # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
+  config.consider_all_bookings_local       = false
   config.action_controller.perform_caching = true
 
   # Enable Rack::Cache to put a simple HTTP cache in front of your application

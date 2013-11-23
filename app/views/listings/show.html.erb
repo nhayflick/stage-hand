@@ -26,16 +26,16 @@
 </p>
 
 <p>
-  <% if @request %>
-    <% if @request.user_id.nil? %>
-      <strong>Request this rental:</strong>
-      <%= form_for [@listing, @request] do |f| %>
+  <% if @booking %>
+    <% if @booking.user_id.nil? %>
+      <strong>Booking this rental:</strong>
+      <%= form_for [@listing, @booking] do |f| %>
           <%= f.label :note %>
           <%= f.text_field :note %>
           <%= f.submit 'Send' %>
       <% end %>
     <% else %>
-      <strong> Request Sent </strong>
+      <strong> Booking Sent </strong>
     <% end %>
   <% end %>
 </p>

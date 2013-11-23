@@ -1,11 +1,16 @@
 StageHand::Application.routes.draw do
   devise_for :users
   resources :listings do
-    resources :requests
+    resources :bookings, shallow: true do
+      resources :replies, only: [:show, :index, :create]
+    end
+  end
+  resources :users, only: [:index, :show] do
+    resources :bookings, shallow: true
   end
   # Not working currently:
   # resources :users do
-  #   resources :requests
+  #   resources :bookings
   # end
 
   # The priority is based upon order of creation: first created -> highest priority.

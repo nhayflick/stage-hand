@@ -12,10 +12,10 @@ class ListingsController < ApplicationController
   # GET /listings/1.json
   def show
     if current_user != @listing.user
-      if current_user.requests.where(listing_id: @listing.id).take.nil?
-        @request = @listing.requests.build
+      if current_user.bookings.where(listing_id: @listing.id).exists?
+        @booking = current_user.bookings.find_by! listing_id: @listing.id
       else
-        @request = current_user.requests.find_by! listing_id: @listing.id
+        @booking = @listing.bookings.build
       end
     end
   end
