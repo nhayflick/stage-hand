@@ -1,0 +1,7 @@
+<% @replies.each do |reply| %>
+	<p>
+		<strong>To: </strong><%= reply.recipient.username %><br>
+		<strong>From: </strong><%= reply.sender.username %><br>
+		<strong>Message: </strong><%= reply.body %><br>
+	</p>
+<% end %>

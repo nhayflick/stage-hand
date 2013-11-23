@@ -1,0 +1,5 @@
+<%= form_for [@booking, @reply] do |f| %>
+	<%= f.label :body, 'Message' %>
+	<%= f.text_field :body %>
+	<%= f.submit 'Send' %>
+<% end %>

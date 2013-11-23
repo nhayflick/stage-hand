@@ -30,5 +30,12 @@
   <%= @booking.accepted %>
 </p>
 
+<p>
+  <%= render './replies/index' %>
+</p>
+
+<p>
+  <%= link_to 'Reply', new_booking_reply_path(@booking) %>
+</p>
 <%= link_to 'Edit', edit_booking_path(@booking) %>
 <%= link_to 'Back', user_bookings_path(current_user) %>

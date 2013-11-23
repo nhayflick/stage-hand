@@ -4,12 +4,12 @@ one:
   booking_id: 1
   body: MyString
   read_at: 2013-11-22
-  recepient_id: 1
+  recipient_id: 1
   sender_id: 1
 
 two:
   booking_id: 1
   body: MyString
   read_at: 2013-11-22
-  recepient_id: 1
+  receiient_id: 1
   sender_id: 1

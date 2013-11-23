@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131123055502) do
+ActiveRecord::Schema.define(version: 20131123215229) do
 
   create_table "bookings", force: true do |t|
     t.integer  "user_id"
@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 20131123055502) do
     t.integer  "booking_id"
     t.string   "body"
     t.date     "read_at"
-    t.integer  "recepient_id"
+    t.integer  "recipient_id"
     t.integer  "sender_id"
     t.datetime "created_at"
     t.datetime "updated_at"

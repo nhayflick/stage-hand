@@ -11,6 +11,7 @@ class BookingsController < ApplicationController
   # GET /bookings/1
   # GET /bookings/1.json
   def show
+    @replies = @booking.replies
   end
 
   # GET /bookings/new
