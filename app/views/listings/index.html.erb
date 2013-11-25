@@ -17,7 +17,7 @@
   <tbody>
     <% @listings.each do |listing| %>
       <tr>
-        <td><%= listing.user_id %></td>
+        <td><%= listing.user.username %></td>
         <td><%= listing.category %></td>
         <td><%= listing.name %></td>
         <td><%= listing.rate %></td>

@@ -29,7 +29,7 @@ class BookingsController < ApplicationController
     @listing = Listing.find(params[:listing_id])
     # puts @listing.bookings
     @booking = @listing.bookings.build(booking_params)
-    @booking.user = current_user
+    @booking.sender = current_user
 
     respond_to do |format|
       if @booking.save

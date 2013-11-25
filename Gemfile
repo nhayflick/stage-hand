@@ -45,3 +45,6 @@ end
 gem 'debugger', group: [:development, :test]
 
 gem 'devise'
+gem 'figaro'
+gem 'paperclip'
+gem 'aws-sdk'

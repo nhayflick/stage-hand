@@ -1,8 +1,8 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>User:</strong>
-  <%= @booking.user_id %>
+  <strong>Sender:</strong>
+  <%= @booking.sender.username %>
 </p>
 
 <p>
@@ -37,5 +37,21 @@
 <p>
   <%= link_to 'Reply', new_booking_reply_path(@booking) %>
 </p>
+
+<% if current_user == @booking.recipient %>
+  <p>
+    <% if @booking.accepted == true %>
+      <%= form_tag booking_psath(@booking), method: :patch do %>
+        <%= hidden_field_tag 'booking[accepted]', 0 %>
+        <%= submit_tag 'Cancel Booking' %>
+      <% end %>
+    <% else %>
+      <%= form_tag booking_path(@booking), method: :patch do %>
+        <%= hidden_field_tag 'booking[accepted]', 1 %>
+        <%= submit_tag 'Accept Booking' %>
+      <% end %>
+    <% end %>
+  </p>
+<% end %>
 <%= link_to 'Edit', edit_booking_path(@booking) %>
 <%= link_to 'Back', user_bookings_path(current_user) %>

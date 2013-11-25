@@ -8,14 +8,13 @@ class RepliesController < ApplicationController
 
   def new
     @reply = Reply.new
-    puts @currnet_scope
     @booking = @current_scope
   end
 
   def create
     @reply = @current_scope.replies.build(reply_params)
     @reply.sender = current_user
-    @reply.recipient = @current_scope.user
+    @reply.recipient = @reply.sender == @current_scope.recipient ? @current_scope.sender : @current_scope.recipient
     
     respond_to do |format|
        if @reply.save
