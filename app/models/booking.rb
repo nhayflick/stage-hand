@@ -1,5 +1,5 @@
 class Booking < ActiveRecord::Base
-  validates :user, :listing, presence: :true
+  validates :sender, :listing, presence: :true
 
   belongs_to :listing
   belongs_to :sender, class_name: "User", foreign_key: "user_id"

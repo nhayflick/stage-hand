@@ -31,8 +31,9 @@ class BookingsController < ApplicationController
     @booking = @listing.bookings.build(booking_params)
     @booking.sender = current_user
 
+    puts @booking.inspect
     respond_to do |format|
-      if @booking.save
+      if @booking.save!
         format.html { redirect_to @booking.listing, notice: 'Booking was successfully created.' }
         format.json { render action: 'show', status: :created, location: @booking.listing }
       else
@@ -82,6 +83,6 @@ class BookingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def booking_params
-      params.require(:booking).permit(:user_id, :listing_id, :note, :start_date, :end_date, :accepted)
+      params.require(:booking).permit(:sender, :recipient, :listing_id, :note, :start_date, :end_date, :accepted)
     end
 end

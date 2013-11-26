@@ -27,7 +27,7 @@
 
 <p>
   <% if @booking %>
-    <% if @booking.user_id? %>
+    <% if @booking.sender.nil? %>
       <strong>Book this rental:</strong>
       <%= form_for [@listing, @booking] do |f| %>
           <%= f.label :note %>

@@ -41,7 +41,7 @@
 <% if current_user == @booking.recipient %>
   <p>
     <% if @booking.accepted == true %>
-      <%= form_tag booking_psath(@booking), method: :patch do %>
+      <%= form_tag booking_path(@booking), method: :patch do %>
         <%= hidden_field_tag 'booking[accepted]', 0 %>
         <%= submit_tag 'Cancel Booking' %>
       <% end %>
