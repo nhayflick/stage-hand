@@ -26,14 +26,14 @@ class BookingsController < ApplicationController
   # POST /bookings
   # POST /bookings.json
   def create
-    @listing = Listing.find(params[:listing_id])
     # puts @listing.bookings
-    @booking = @listing.bookings.build(booking_params)
+    @booking = Booking.new(booking_params)
     @booking.sender = current_user
+    # @booking.listing_id = params[:listing_id]
 
-    puts @booking.inspect
+    # puts @booking.inspect
     respond_to do |format|
-      if @booking.save!
+      if @booking.save
         format.html { redirect_to @booking.listing, notice: 'Booking was successfully created.' }
         format.json { render action: 'show', status: :created, location: @booking.listing }
       else

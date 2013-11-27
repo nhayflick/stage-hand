@@ -4,13 +4,6 @@ source 'https://rubygems.org'
 gem 'rails', '4.0.1'
 
 # Use postgres as the database for Active Record
-# group :production do
-# 	gem 'pg'
-# end
-
-# group :development, :test do
-# 	gem 'sqlite3'
-# end
 
 gem 'pg'
 
@@ -65,6 +58,7 @@ gem 'devise'
 gem 'figaro'
 gem 'paperclip'
 gem 'aws-sdk'
+gem 'squeel'
 
 # Ruby 2 w00t
 ruby "2.0.0"
