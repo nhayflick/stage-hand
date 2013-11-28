@@ -1,19 +1,15 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>User:</strong>
-  <%= @listing.user_id %>
-</p>
-
-<p>
-  <strong>Category:</strong>
-  <%= @listing.category %>
-</p>
 
 <p>
   <strong>Name:</strong>
   <%= @listing.name %>
 </p>
+
+<p>
+  <%= image_tag @listing.listing_images[0].image.url(:medium) if @listing.listing_images.length > 0%>
+</p>
+
 
 <p>
   <strong>Rate:</strong>
@@ -23,6 +19,16 @@
 <p>
   <strong>Description:</strong>
   <%= @listing.description %>
+</p>
+
+<p>
+  <strong>Category:</strong>
+  <%= @listing.category %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @listing.user.username %>
 </p>
 
 <p>

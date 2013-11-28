@@ -12,7 +12,6 @@ class Booking < ActiveRecord::Base
   end
 
   def overlapping?
-  	puts self.inspect
   	self.listing.bookings.each do |other_booking|
   		if (self.start_date..self.end_date).overlaps?(other_booking.start_date..other_booking.end_date)
   			return true

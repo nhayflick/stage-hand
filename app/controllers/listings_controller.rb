@@ -23,6 +23,7 @@ class ListingsController < ApplicationController
   # GET /listings/new
   def new
     @listing = Listing.new
+    3.times {@listing.listing_images.build}
   end
 
   # GET /listings/1/edit
@@ -78,7 +79,7 @@ class ListingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def listing_params
-      params.require(:listing).permit(:user_id, :category, :name, :rate, :description)
+      params.require(:listing).permit(:user_id, :category, :name, :rate, :description, listing_images_attributes: [:listing_id, :image])
     end
 
     def ensure_permission

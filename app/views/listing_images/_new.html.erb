@@ -1,0 +1,6 @@
+<%= fields_for(:listing_photos) do |photo| %>
+	<div class="field">
+	  <%= photo.label :image %><br />
+	  <%= photo.file_field :image %>
+	</div>
+<% end %>
