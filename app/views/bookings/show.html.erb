@@ -1,8 +1,13 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Sender:</strong>
+  <strong>From:</strong>
   <%= @booking.sender.username %>
+</p>
+
+<p>
+  <strong>To:</strong>
+  <%= @booking.recipient.username %>
 </p>
 
 <p>
@@ -27,7 +32,7 @@
 
 <p>
   <strong>Accepted:</strong>
-  <%= @booking.accepted %>
+  <%= @booking.accepted_at %>
 </p>
 
 <p>
@@ -40,14 +45,14 @@
 
 <% if current_user == @booking.recipient %>
   <p>
-    <% if @booking.accepted == true %>
+    <% if @booking.accepted_at %>
       <%= form_tag booking_path(@booking), method: :patch do %>
-        <%= hidden_field_tag 'booking[accepted]', 0 %>
+        <%= hidden_field_tag 'booking[state]', 'cancel' %>
         <%= submit_tag 'Cancel Booking' %>
       <% end %>
     <% else %>
       <%= form_tag booking_path(@booking), method: :patch do %>
-        <%= hidden_field_tag 'booking[accepted]', 1 %>
+        <%= hidden_field_tag 'booking[state]', 'accept' %>
         <%= submit_tag 'Accept Booking' %>
       <% end %>
     <% end %>

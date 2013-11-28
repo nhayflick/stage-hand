@@ -1,11 +1,12 @@
 class BookingsController < ApplicationController
+  before_action :detect_change_state, only: :update
   before_action :set_booking, only: [:show, :edit, :update, :destroy]
   before_action :set_scope, only: :index
 
   # GET /bookings
   # GET /bookings.json
   def index
-    @bookings = @current_scope.bookings
+    @bookings = @current_scope
   end
 
   # GET /bookings/1
@@ -73,14 +74,29 @@ class BookingsController < ApplicationController
 
     def set_scope
       if params[:listing_id]
-        @current_scope = Listing.find(params[:listing_id])
+        @current_scope = Listing.find(params[:listing_id]).bookings
       elsif params[:user_id]
-        @current_scope = User.find(params[:user_id])
+        @current_scope = Booking.related_to_user(User.find(params[:user_id]))
       end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def booking_params
-      params.require(:booking).permit(:sender, :recipient, :listing_id, :note, :start_date, :end_date, :accepted)
+      params.require(:booking).permit(:note, :start_date, :end_date)
+    end
+
+    def detect_change_state
+      puts "detecting"
+      case params[:booking][:state]
+          when 'accept'
+            puts 'accept'
+            return false
+          when 'cancel'
+            puts 'cancel'
+            return false
+          else
+            puts 'no state'
+            return true
+      end
     end
 end

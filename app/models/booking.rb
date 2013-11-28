@@ -20,4 +20,8 @@ class Booking < ActiveRecord::Base
   	return false
   end
 
+  def self.related_to_user(user)
+  	(user.requested_bookings + user.bookings).sort{|a,b| a.created_at <=> b.created_at }
+  end
+
 end

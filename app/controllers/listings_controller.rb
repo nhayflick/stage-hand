@@ -28,6 +28,7 @@ class ListingsController < ApplicationController
 
   # GET /listings/1/edit
   def edit
+    3.times {@listing.listing_images.build}
   end
 
   # POST /listings

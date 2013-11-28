@@ -7,5 +7,6 @@ class User < ActiveRecord::Base
   validates :username, length: { in: 3..30 }
 
   has_many :listings
+  has_many :requested_bookings, through: :listings, source: :bookings
   has_many :bookings
 end
