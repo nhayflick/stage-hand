@@ -8,7 +8,7 @@ class Booking < ActiveRecord::Base
   has_one :recipient, through: :listing, source: :user
 
   def no_overlaps
-  	errors.add(:start_date, "can't overlap with other bookings for this listing.") if self.overlapping?
+  	errors.add(:base, "This listing is already booked for those dates! Please try adjusting your rental dates.") if self.overlapping?
   end
 
   def overlapping?

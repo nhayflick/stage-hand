@@ -31,6 +31,13 @@
     <%= f.label :description %><br>
     <%= f.text_area :description %>
   </div>
+
+  <%= f.fields_for(:listing_images) do |photo| %>
+      <div class="field">
+        <%= photo.label :image %><br />
+        <%= photo.file_field :image %>
+      </div>
+  <% end %>
   <div class="actions">
     <%= f.submit %>
   </div>

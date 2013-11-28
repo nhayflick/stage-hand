@@ -7,7 +7,7 @@
 </p>
 
 <p>
-  <%= image_tag @listing.listing_images[0].image.url(:medium) if @listing.listing_images.length > 0%>
+  <%= image_tag @listing.listing_images.first.image.url(:medium) unless @listing.listing_images.blank? %>
 </p>
 
 

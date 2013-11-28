@@ -41,6 +41,7 @@ class ListingsController < ApplicationController
         format.html { redirect_to @listing, notice: 'Listing was successfully created.' }
         format.json { render action: 'show', status: :created, location: @listing }
       else
+        3.times {@listing.listing_images.build}
         format.html { render action: 'new' }
         format.json { render json: @listing.errors, status: :unprocessable_entity }
       end
