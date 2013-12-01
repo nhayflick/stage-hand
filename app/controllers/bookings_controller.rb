@@ -1,6 +1,6 @@
 class BookingsController < ApplicationController
-  before_action :detect_change_state, only: :update
   before_action :set_booking, only: [:show, :edit, :update, :destroy]
+  before_action :detect_change_state, only: :update
   before_action :set_scope, only: :index
 
   # GET /bookings
@@ -77,6 +77,8 @@ class BookingsController < ApplicationController
         @current_scope = Listing.find(params[:listing_id]).bookings
       elsif params[:user_id]
         @current_scope = Booking.related_to_user(User.find(params[:user_id]))
+      elsif current_user
+        @current_scope = Booking.related_to_user(current_user)
       end
     end
 
@@ -89,7 +91,9 @@ class BookingsController < ApplicationController
       puts "detecting"
       case params[:booking][:state]
           when 'accept'
+            @booking.accept
             puts 'accept'
+            redirect_to @booking, notice: 'Booking was accepted!'
             return false
           when 'cancel'
             puts 'cancel'

@@ -32,7 +32,7 @@
 
 <p>
   <strong>Accepted:</strong>
-  <%= @booking.accepted_at %>
+  <%= @booking.accepted_at.strftime("This booking was accepted on %B %d at %I:%M %p") %>
 </p>
 
 <p>

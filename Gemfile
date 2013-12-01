@@ -59,6 +59,9 @@ gem 'figaro'
 gem 'paperclip'
 gem 'aws-sdk'
 gem 'squeel'
+gem 'mailboxer'
+gem 'state_machine'
+gem 'rails-observers'
 
 # Ruby 2 w00t
 ruby "2.0.0"
