@@ -29,4 +29,10 @@ StageHand::Application.configure do
 
   # For Devise Rails
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+
+   #Use Wepay Stage Environment
+  CLIENT_ID = ENV['CLIENT_ID']
+  CLIENT_SECRET = ENV['CLIENT_SECRET']
+  USE_STAGE = true
+  WEPAY = WePay.new(CLIENT_ID, CLIENT_SECRET, USE_STAGE)
 end
