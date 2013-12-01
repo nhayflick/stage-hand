@@ -10,6 +10,10 @@ StageHand::Application.routes.draw do
     resources :bookings, shallow: true
   end
 
+  get '/users/:action(/:user_id)', :controller => 'users'
+  get '/bookings/:action(/:id)', :controller => 'bookings'
+
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

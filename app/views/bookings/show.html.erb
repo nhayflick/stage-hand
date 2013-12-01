@@ -32,12 +32,25 @@
 
 <p>
   <strong>Accepted:</strong>
-  <%= @booking.accepted_at.strftime("This booking was accepted on %B %d at %I:%M %p") %>
+  <%= @booking.accepted_at.strftime("This booking was accepted on %B %d at %I:%M %p") if @booking.accepted_at%>
 </p>
 
 <p>
   <%= render './replies/index' %>
 </p>
+
+<p>
+  <% if (current_user.has_wepay_account? && current_user == @booking.recipient) %>
+  <br />
+  <%= link_to "Confirm with credit card!", "/bookings/pay/#{@booking.id}", :class => 'btn btn-danger btn-large', :id => 'buy-now-button' %>
+  <% end %>
+</p>
+
+<p>
+<% if @booking.state == 'paid' %>
+ <strong>Booking paid for on:</strong>
+  <%= @booking.paid_at.strftime("This booking was paid for on %B %d at %I:%M %p") if @booking.paid_at%>
+<% end %>
 
 <p>
   <%= link_to 'Reply', new_booking_reply_path(@booking) %>

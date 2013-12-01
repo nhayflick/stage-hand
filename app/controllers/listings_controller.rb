@@ -1,7 +1,8 @@
 class ListingsController < ApplicationController
   before_action :set_listing, only: [:show, :edit, :update, :destroy]
-  before_action :ensure_permission, only: [:edit, :update, :destroy]
+  before_action :is_owner?, only: [:edit, :update, :destroy]
   before_action :authenticate_user!, only: [:new, :create]
+  before_action :check_wepay, only: [:new, :create]
   # GET /listings
   # GET /listings.json
   def index
@@ -84,9 +85,19 @@ class ListingsController < ApplicationController
       params.require(:listing).permit(:user_id, :category, :name, :rate, :description, listing_images_attributes: [:listing_id, :image])
     end
 
-    def ensure_permission
+    def is_owner?
       if current_user != @listing.user
         redirect_to root_path
+        return false
+      else
+        return true
+      end
+    end
+
+    def check_wepay
+      if !current_user.has_valid_wepay_access_token? || !current_user.has_wepay_account?
+        redirect_uri = url_for(:controller => 'users', :action => 'oauth', :user_id => @current_user.id, :host => request.host_with_port)
+        redirect_to current_user.wepay_authorization_url(redirect_uri)
       end
     end
 end

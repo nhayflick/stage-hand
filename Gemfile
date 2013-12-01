@@ -61,7 +61,7 @@ gem 'aws-sdk'
 gem 'squeel'
 gem 'mailboxer'
 gem 'state_machine'
-gem 'rails-observers'
+gem 'wepay'
 
 # Ruby 2 w00t
 ruby "2.0.0"

@@ -26,7 +26,7 @@ class UsersController < ApplicationController
   def create
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user.listing, notice: 'User was successfully created.' }
+        format.html { redirect_to url_for(:controller => 'users', :action => 'oauth'), notice: 'User was successfully created.' }
         format.json { render action: 'show', status: :created, location: @user.listing }
       else
         format.html { render action: 'new' }
@@ -56,6 +56,29 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html { redirect_to users_url }
       format.json { head :no_content }
+    end
+  end
+
+  # GET /users/oauth/1
+  def oauth
+    if !params[:code]
+      return redirect_to('/')
+    end
+
+    redirect_uri = url_for(:controller => 'users', :action => 'oauth', :user_id => params[:user_id], :host => request.host_with_port)
+    
+    @user = User.find(params[:user_id])
+    puts redirect_uri
+    begin
+      @user.request_wepay_access_token(params[:code], redirect_uri)
+    rescue Exception => e
+      error = e.message
+    end
+
+    if error
+      redirect_to listings_path, alert: error
+    else
+      redirect_to new_listing_path, notice: 'We successfully connected you to WePay!'
     end
   end
 

@@ -1,5 +1,5 @@
 class BookingsController < ApplicationController
-  before_action :set_booking, only: [:show, :edit, :update, :destroy]
+  before_action :set_booking, only: [:show, :edit, :update, :destroy, :pay, :payment_success]
   before_action :detect_change_state, only: :update
   before_action :set_scope, only: :index
 
@@ -64,6 +64,28 @@ class BookingsController < ApplicationController
       format.html { redirect_to bookings_url }
       format.json { head :no_content }
     end
+  end
+
+  # GET /bookings/pay/1
+  def pay
+    redirect_uri = url_for(:controller => 'bookings', :action => 'payment_success', :id => params[:id], :host => request.host_with_port)
+    begin
+      @checkout = @booking.create_checkout(redirect_uri)
+    rescue Exception => e
+      redirect_to @booking, alert: e.message
+    end
+  end
+
+  # GET /bookings/payment_success/1
+  def payment_success
+    if !params[:checkout_id]
+      return redirect_to @booking, alert: "Error - Checkout ID is expected"
+    end
+    if (params['error'] && params['error_description'])
+      return redirect_to @booking, alert: "Error - #{params['error_description']}"
+    end
+    @booking.pay
+    redirect_to @booking, notice: "Thanks for the payment! You should receive a confirmation email shortly."
   end
 
   private

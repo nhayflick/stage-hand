@@ -15,8 +15,13 @@ class Booking < ActiveRecord::Base
       transition :requested => :accepted
     end
 
+    event :pay do
+      transition :accepted => :paid
+    end
+
     before_transition :requested => :accepted, :do => :record_acceptance
     after_transition :requested => :accepted, :do => :send_accepted_notification
+    after_transition :accepted => :paid, :do => :record_payment
   end
 
   def no_overlaps
@@ -53,6 +58,39 @@ class Booking < ActiveRecord::Base
 
   def record_acceptance
     self.update_attribute('accepted_at', DateTime.now)
+  end
+
+  def record_payment
+    self.update_attribute('paid_at', DateTime.now)
+  end
+
+  # Wepay Methods
+  def create_checkout(redirect_uri)
+    duration = (self.end_date - self.start_date).to_i
+    total_cost = self.listing.rate.to_i * duration
+
+    # calculate app_fee as 15% of produce price
+    app_fee = total_cost * 0.15
+
+    params = { 
+      :account_id => self.recipient.wepay_account_id, 
+      :short_description => "Scenius equipment rental of #{self.listing.name} from #{self.start_date} to #{self.end_date}.",
+      :type => :SERVICE,
+      :amount => total_cost,      
+      :app_fee => app_fee,
+      :fee_payer => :payee,     
+      :mode => :iframe,
+      :redirect_uri => redirect_uri
+    }
+    response = WEPAY.call('/checkout/create', self.recipient.wepay_access_token, params)
+
+    if !response
+      raise "Error - no response from WePay"
+    elsif response['error']
+      raise "Error - " + response["error_description"]
+    end
+
+    return response
   end
 
 end
