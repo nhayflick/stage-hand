@@ -1,5 +1,4 @@
 class User < ActiveRecord::Base
-  acts_as_messageable
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -11,6 +10,7 @@ class User < ActiveRecord::Base
   has_many :listings
   has_many :requested_bookings, through: :listings, source: :bookings
   has_many :bookings
+  has_many :notifications, foreign_key: "recipient_id"
 
   #Wepay Methods
 

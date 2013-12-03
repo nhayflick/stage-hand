@@ -1,0 +1,9 @@
+<strong>
+  Notifications:
+</strong>
+
+<p>
+  <% @notifications.each do |notification| %>
+  	<%= link_to "#{notification.title}: #{notification.body}", notification.notifiable %>
+  <% end %>
+</p>

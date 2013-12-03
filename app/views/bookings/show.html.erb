@@ -40,7 +40,8 @@
 </p>
 
 <p>
-  <% if (current_user.has_wepay_account? && current_user == @booking.recipient) %>
+  <%# if (current_user.has_wepay_account? && current_user == @booking.recipient) %>
+  <% if (current_user == @booking.sender && @booking.state == 'accepted')%>
   <br />
   <%= link_to "Confirm with credit card!", "/bookings/pay/#{@booking.id}", :class => 'btn btn-danger btn-large', :id => 'buy-now-button' %>
   <% end %>

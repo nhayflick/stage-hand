@@ -16,8 +16,8 @@
 	<div><%=f.label :name %><br>
 	<%= f.text_field :name %></div>
 
-	<select name='listing[category_id]'>
-  	</select>
+	<div><%= f.label :category %><br>
+	<%= f.select :category, Listing.categories.map {|value| [value, value] } %></div>
 
 	<div><%=f.label :description %><br>
 	<%= f.text_field :description %></div>

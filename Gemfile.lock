@@ -42,6 +42,9 @@ GEM
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
       json (>= 1.7)
+    cells (3.9.0)
+      actionpack (>= 3.0)
+      railties (>= 3.0)
     climate_control (0.0.3)
       activesupport (>= 3.0)
     cocaine (0.5.3)
@@ -176,6 +179,7 @@ DEPENDENCIES
   aws-sdk
   better_errors
   binding_of_caller
+  cells
   coffee-rails (~> 4.0.0)
   debugger
   devise

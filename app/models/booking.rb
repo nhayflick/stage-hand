@@ -1,13 +1,18 @@
 class Booking < ActiveRecord::Base
   validates :sender, :listing, presence: :true
-  validate :no_overlaps, on: :create
+  validate :no_overlaps, :valid_dates, on: :create
 
   belongs_to :listing
   belongs_to :sender, class_name: "User", foreign_key: "user_id"
   has_many :replies
   has_one :recipient, through: :listing, source: :user
+  has_many :notifications, as: :notifiable
 
   after_create :send_request_notification
+
+  # ------------------------------
+  # State Machine 
+  # ------------------------------
 
   state_machine :initial => :requested do
 
@@ -19,9 +24,10 @@ class Booking < ActiveRecord::Base
       transition :accepted => :paid
     end
 
-    before_transition :requested => :accepted, :do => :record_acceptance
+    after_transition :requested => :accepted, :do => :record_acceptance
     after_transition :requested => :accepted, :do => :send_accepted_notification
     after_transition :accepted => :paid, :do => :record_payment
+    after_transition :accepted => :paid, :do => :send_payment_notification
   end
 
   def no_overlaps
@@ -37,24 +43,37 @@ class Booking < ActiveRecord::Base
   	return false
   end
 
+  def valid_dates
+    errors.add(:base, "Your rental must last for at least one full day.") if self.start_date >= self.end_date
+  end
+
+  # ------------------------------
+  # Controller Methods
+  # ------------------------------
+
   def self.related_to_user(user)
   	(user.requested_bookings + user.bookings).sort{|a,b| a.created_at <=> b.created_at }
   end
 
+  # ------------------------------
+  # Notification Methods
+  # ------------------------------
+
   def send_request_notification
-    puts "notification callback"
-    self.recipient.notify(
-      'New Booking!',
-      '#{booking.sender.username.capitalize} sent a request for #{booking.listing.name})!',
-    self.listing)
+    self.notifications.create(title: 'New Booking!', body: "#{self.sender.username.capitalize} sent a request for #{self.listing.name}", recipient_id: self.recipient.id)
   end
 
   def send_accepted_notification(booking)
-    self.sender.notify(
-      'Booking accepted!',
-      '#{booking.recipient.username.capitalize} accepted your booking request for #{booking.listing.name})! Enter your payment info to confirm your reservation!',
-      self)
+    self.notifications.create(title: 'Booking Accepted!', body: "#{self.recipient.username.capitalize} accepted your booking request for #{self.listing.name}. Enter your payment info to confirm your reservation!", recipient_id: self.sender.id)
   end
+
+  def send_payment_notification(booking)
+    self.notifications.create(title: 'Booking Payment Completed!', body: "#{self.sender.username.capitalize} approved a payment for #{self.listing.name}. Funds will be deposited 24 hours after equipment rental!", recipient_id: self.recipient.id)
+  end
+
+  # ------------------------------
+  # Update Attribute Methods
+  # ------------------------------
 
   def record_acceptance
     self.update_attribute('accepted_at', DateTime.now)
@@ -64,7 +83,10 @@ class Booking < ActiveRecord::Base
     self.update_attribute('paid_at', DateTime.now)
   end
 
+  # ------------------------------
   # Wepay Methods
+  # ------------------------------
+
   def create_checkout(redirect_uri)
     duration = (self.end_date - self.start_date).to_i
     total_cost = self.listing.rate.to_i * duration
