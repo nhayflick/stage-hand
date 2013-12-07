@@ -1,0 +1,41 @@
+// Place all the styles related to the Home controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.splash-panel-1 {
+	width: 100%;
+	left: 0;
+	top: 0;
+	position: absolute;
+	height: 100%;
+	background-size: cover;
+	background-position-y: -100px;
+	z-index: -1;
+	background-image: url("https://s3.amazonaws.com/stageHand-assets/static_images/marketing_page/brutebg.jpg");
+}
+
+.splash-panel-2 {
+	font-family: 'Ubuntu', sans-serif;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	background-color: rgb(240, 250, 244);
+	left: 0px;
+	color: rgb(40, 197, 97);
+	text-align: left;
+}
+
+.splash-panel-3 {
+	width: 100%;
+	left: 0;
+	position: absolute;
+	font-family: 'Ubuntu', sans-serif;
+	height: 80px;
+	bottom: 0;
+	color: #494949;
+	padding: 20px 0;
+	font-size: 30px;
+	line-height: 40px;
+	background-color: rgb(240, 250, 244);
+	text-align: center;
+}

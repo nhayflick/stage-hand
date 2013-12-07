@@ -63,6 +63,9 @@ gem 'mailboxer'
 gem 'state_machine'
 gem 'wepay'
 gem 'cells'
+gem 'geocoder'
+gem 'ransack'
+gem 'bootstrap-sass', '~> 3.0.3.0'
 
 # Ruby 2 w00t
 ruby "2.0.0"

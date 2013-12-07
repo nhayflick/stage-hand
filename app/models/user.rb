@@ -12,7 +12,29 @@ class User < ActiveRecord::Base
   has_many :bookings
   has_many :notifications, foreign_key: "recipient_id"
 
-  #Wepay Methods
+  # -----------------------
+  # Geocoder methods
+  # -----------------------
+
+  geocoded_by :address   # can also be an IP address
+  after_validation :fetch_coordinates
+
+  reverse_geocoded_by :latitude, :longitude do |obj,results|
+	  if geo = results.first
+	    state = geo.state
+   		country_code = geo.country_code
+    	obj.address = [geo.state, geo.country_code].join(",")
+    	obj.zipcode = geo.postal_code
+	  end
+	end
+  after_validation :reverse_geocode
+  # after_validation :geocode
+
+
+
+  # -----------------------
+  # Wepay Methods
+  # -----------------------
 
   # returns a url
 	def wepay_authorization_url(redirect_uri)

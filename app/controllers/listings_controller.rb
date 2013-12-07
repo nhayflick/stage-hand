@@ -6,7 +6,14 @@ class ListingsController < ApplicationController
   # GET /listings
   # GET /listings.json
   def index
-    @listings = Listing.all
+    @q = Listing.search(params[:q])
+    if params[:zipcode]
+      @listings = User.near(params[:zipcode], 10).listings
+      # @q = Listing.search(params[:q])
+      # @listings = @q.result(distinct: true)
+    else
+      @listings = Listing.all
+    end
   end
 
   # GET /listings/1

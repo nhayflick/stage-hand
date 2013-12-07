@@ -1,9 +1,8 @@
-<strong>
-  Notifications:
-</strong>
-
-<p>
+<!-- <p>
   <% @notifications.each do |notification| %>
   	<%= link_to "#{notification.title}: #{notification.body}", notification.notifiable %>
   <% end %>
 </p>
+
+ -->
+ <%= link_to pluralize(@notifications.length, 'alert'), @user %> 
