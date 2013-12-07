@@ -1,5 +1,5 @@
 <h1>Listings</h1>
-
+<!-- 
 <table>
   <thead>
     <tr>
@@ -29,7 +29,40 @@
     <% end %>
   </tbody>
 </table>
+ -->
 
-<br>
+ <% @listings.each do |listing| %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4>
+        <span style="font-family: 'Ubuntu', sans-serif;">
+          <%= listing.name %> / $<%= listing.rate %> <light>each day</light>
+          <span class="pull-right">
+            <%= listing.category %>
+            <%= link_to "RENT", listing, :class => 'btn btn-scenius' %>  
+          </span>
+        </span>
+      </h4>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-xs-3">
+          <%= image_tag listing.listing_images.first.image.url(:thumb), :class => "img-thumbnail" unless listing.listing_images.blank?%>
+        </div>
+        <div class="col-xs-4">
+          <%= listing.description %>
+        </div>
+        <div class="col-xs-4">
+          <%= listing.user.username %>
+          <%= listing.user.zipcode %>
+          <%= link_to 'Show', listing %>
+          <%= link_to 'Edit', edit_listing_path(listing) %>
+          <%= link_to 'Destroy', listing, method: :delete, data: { confirm: 'Are you sure?' } %>
+        </div>
+      </div
+    </div>
+  </div>
+  </div>
+<% end %>
 
 <%= link_to 'New Listing', new_listing_path %>
