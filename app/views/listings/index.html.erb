@@ -47,7 +47,7 @@
     <div class="panel-body">
       <div class="row">
         <div class="col-xs-3">
-          <%= image_tag listing.listing_images.first.image.url(:thumb), :class => "img-thumbnail" unless listing.listing_images.blank?%>
+          <%= image_tag listing.listing_images.first.image.url(:thumb), :class => "img-circle" unless listing.listing_images.blank?%>
         </div>
         <div class="col-xs-4">
           <%= listing.description %>

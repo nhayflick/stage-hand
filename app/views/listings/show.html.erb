@@ -1,52 +1,131 @@
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.input-daterange').datepicker();
+    $('#booking_start_date, #booking_end_date').change(function(){
+      window.scenius.calculatePrice();
+    });
+  })
+</script>
+
 <p id="notice"><%= notice %></p>
 
+<div class="panel panel-default">
+  <div class="panel-heading">
+      <h2>
+        <span style="font-family: 'Ubuntu', sans-serif;">
+          <%= @listing.name %> / $<%= @listing.rate %> <light>each day</light>
+          <span class="pull-right">
+            <%= @listing.category %>
+          </span>
+        </span>
+      </h2>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-sm-6">
+        <center>
+          <div style="width: 300px; height: 200px;">
+            <!-- Image Carousel -->
+            <p>  
+              <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+              <!-- Indicators -->
+              <ol class="carousel-indicators">
+                <% @listing.listing_images.each_with_index do |listing_image, i| %>
+                  <li data-target="#carousel-example-generic" data-slide-to="0" class="<% if i == 0 %>active<% end %>"></li>
+                <% end %>
+              </ol>
 
-<p>
-  <strong>Name:</strong>
-  <%= @listing.name %>
-</p>
+              <!-- Wrapper for slides -->
+              <div class="carousel-inner">
+                <% @listing.listing_images.each_with_index do |listing_image, i| %>
+                  <div class="item <% if i == 0 %>active<% end %>">
+                    <%= image_tag listing_image.image.url(:medium), :style => 'width: 300px; height: 200px;' %>
+                    <div class="carousel-caption">
+                      <%= @listing.name %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
 
-<p>
-  <%= image_tag @listing.listing_images.first.image.url(:square) unless @listing.listing_images.blank? %>
-</p>
+              <!-- Controls -->
+              <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+              </a>
+              <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+              </a>
+              </div>
+            </p>
+            <br>
+          </div>
+        </center>
+      </div>
+
+      <!-- Rental Container -->
+      <div class="col-sm-6">
+        <center>
+           <p>
+            <% if @booking %>
+              <div class="well" style="width: 300px;">
+                <center>
+                  <% if @booking.sender.nil? %>
+                    <h4>REQUEST A BOOKING</h4>
+                    <%= form_for [@listing, @booking], :class => 'form-inline' do |f| %>
+                        <div class="form-group">
+                          <div class="input-daterange">
+                            <div class="input-group">
+                              <%= f.text_field :start_date, :class => "form-control input-small", :name => "start", :placeholder => "Pick Up" %> <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                            </div>
+                            <br>
+                            <div class="input-group">
+                              <%= f.text_field :end_date, :class => "form-control input-small", :name => "end", :placeholder => "Drop Off" %><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                            </div>
+                          </div>
+                        </div>
+                        <h2>
+                          <div id="live-price" data-price="<%= @listing.rate %>">
+                            $<span id="price-span"><%=@listing.rate%></span>
+                          </div>
+                        </h2>
+                        <div class="form-group">
+                          <%= f.text_field :note, :class => 'form-control', :placeholder => 'Note to Owner (optional)' %>
+                        </div>
+                        <div class="form-group">
+                          <%= f.submit 'Send', :class => 'form-control btn-scenius' %>
+                        </div>
+                    <% end %>
+                  <% else %>
+                    <strong> Booking Sent </strong>
+                  <% end %>
+                </center>
+              </div>
+            <% end %>
+          </p>
+        </center>
+      </div>
+    </div>
+    <p>
+      <strong>Rate:</strong>
+      <%= @listing.rate %>
+    </p>
+
+    <p>
+      <strong>Description:</strong>
+      <%= @listing.description %>
+    </p>
+
+    <p>
+      <strong>Category:</strong>
+      <%= @listing.category %>
+    </p>
+
+    <p>
+      <strong>User:</strong>
+      <%= @listing.user.username %>
+    </p>
+  </div>
 
 
-<p>
-  <strong>Rate:</strong>
-  <%= @listing.rate %>
-</p>
-
-<p>
-  <strong>Description:</strong>
-  <%= @listing.description %>
-</p>
-
-<p>
-  <strong>Category:</strong>
-  <%= @listing.category %>
-</p>
-
-<p>
-  <strong>User:</strong>
-  <%= @listing.user.username %>
-</p>
-
-<p>
-  <% if @booking %>
-    <% if @booking.sender.nil? %>
-      <strong>Book this rental:</strong>
-      <%= form_for [@listing, @booking] do |f| %>
-          <%= f.label :note %>
-          <%= f.text_field :note %>
-          <%= f.date_select :start_date %>
-          <%= f.date_select :end_date %>
-          <%= f.submit 'Send' %>
-      <% end %>
-    <% else %>
-      <strong> Booking Sent </strong>
-    <% end %>
-  <% end %>
-</p>
-
-<%= link_to 'Edit', edit_listing_path(@listing) %> |
-<%= link_to 'Back', listings_path %>
+  <%= link_to 'Edit', edit_listing_path(@listing) %> |
+  <%= link_to 'Back', listings_path %>
+</div>
