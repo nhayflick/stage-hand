@@ -8,12 +8,13 @@
 	<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,500|Lato:300,400,700' rel='stylesheet' type='text/css'>
 </head>
 <body>
-  <%= render :partial => 'layouts/navbar' %>
-  <p class="notice"><%= notice %></p>
-  <p class="alert"><%= alert %></p>
+  <div class="body-wrapper">
+    <%= render :partial => 'layouts/navbar' %>
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
 
 
-<%= yield %>
-
+  <%= yield %>
+  </div>
 </body>
 </html>

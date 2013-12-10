@@ -60,15 +60,15 @@ class Booking < ActiveRecord::Base
   # ------------------------------
 
   def send_request_notification
-    self.notifications.create(title: 'New Booking!', body: "#{self.sender.username.capitalize} sent a request for #{self.listing.name}", recipient_id: self.recipient.id)
+    self.notifications.create(title: 'New Booking!', body: "#{self.sender.name.capitalize} sent a request for #{self.listing.name}", recipient_id: self.recipient.id)
   end
 
   def send_accepted_notification(booking)
-    self.notifications.create(title: 'Booking Accepted!', body: "#{self.recipient.username.capitalize} accepted your booking request for #{self.listing.name}. Enter your payment info to confirm your reservation!", recipient_id: self.sender.id)
+    self.notifications.create(title: 'Booking Accepted!', body: "#{self.recipient.name.capitalize} accepted your booking request for #{self.listing.name}. Enter your payment info to confirm your reservation!", recipient_id: self.sender.id)
   end
 
   def send_payment_notification(booking)
-    self.notifications.create(title: 'Booking Payment Completed!', body: "#{self.sender.username.capitalize} approved a payment for #{self.listing.name}. Funds will be deposited 24 hours after equipment rental!", recipient_id: self.recipient.id)
+    self.notifications.create(title: 'Booking Payment Completed!', body: "#{self.sender.name.capitalize} approved a payment for #{self.listing.name}. Funds will be deposited 24 hours after equipment rental!", recipient_id: self.recipient.id)
   end
 
   # ------------------------------

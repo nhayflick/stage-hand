@@ -13,7 +13,8 @@
           <div class="pull-right">
             <ul class="nav navbar-nav">
               <% if current_user %>
-                <li> <%= link_to current_user.username, current_user %></li>
+                <li><%= image_tag current_user.fetch_avatar, :class => 'img-circle nav-avatar'%></li>
+                <li><%= link_to current_user.name, current_user %></li>
                 <li><%= render_cell :notifications, :index, :user => current_user%></li>
                 <li><%= link_to 'My Gear', listings_path(@user) %> </li>
                 <li><%= link_to 'My Bookings', bookings_path(@user) %> </li>

@@ -74,11 +74,11 @@
                         <div class="form-group">
                           <div class="input-daterange">
                             <div class="input-group">
-                              <%= f.text_field :start_date, :class => "form-control input-small", :name => "start", :placeholder => "Pick Up" %> <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                              <%= f.text_field :start_date, :class => "form-control input-small", :name => "booking[start_date]", :placeholder => "Pick Up" %> <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                             </div>
                             <br>
                             <div class="input-group">
-                              <%= f.text_field :end_date, :class => "form-control input-small", :name => "end", :placeholder => "Drop Off" %><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                              <%= f.text_field :end_date, :class => "form-control input-small", :name => "booking[end_date]", :placeholder => "Drop Off" %><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                             </div>
                           </div>
                         </div>
@@ -95,7 +95,8 @@
                         </div>
                     <% end %>
                   <% else %>
-                    <strong> Booking Sent </strong>
+                    <strong> Booking Request Sent</strong><br>
+                    <%= link_to "View", @booking %>
                   <% end %>
                 </center>
               </div>
@@ -105,23 +106,13 @@
       </div>
     </div>
     <p>
-      <strong>Rate:</strong>
-      <%= @listing.rate %>
-    </p>
-
-    <p>
-      <strong>Description:</strong>
+      <strong><%= @listing.user.name %> says:</strong>
       <%= @listing.description %>
     </p>
 
     <p>
-      <strong>Category:</strong>
-      <%= @listing.category %>
-    </p>
-
-    <p>
-      <strong>User:</strong>
-      <%= @listing.user.username %>
+      <strong>Owner:</strong>
+      <%= image_tag @listing.user.fetch_avatar, :class => "img-circle" %> <%= @listing.user.name %>
     </p>
   </div>
 

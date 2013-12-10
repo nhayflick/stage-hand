@@ -1,68 +1,52 @@
-<h1>Listings</h1>
-<!-- 
-<table>
-  <thead>
-    <tr>
-      <th>User</th>
-      <th>Category</th>
-      <th>Name</th>
-      <th>Rate</th>
-      <th>Description</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
+<div class="row">
+  <div class="col-sm-10 col-sm-offset-1">
+    <center>
+      <h1>Listings</h1>
 
-  <tbody>
-    <% @listings.each do |listing| %>
-      <tr>
-        <td><%= listing.user.username %></td>
-        <td><%= listing.category %></td>
-        <td><%= listing.name %></td>
-        <td><%= listing.rate %></td>
-        <td><%= listing.description %></td>
-        <td><%= link_to 'Show', listing %></td>
-        <td><%= link_to 'Edit', edit_listing_path(listing) %></td>
-        <td><%= link_to 'Destroy', listing, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+      <% if @listings.length == 0 %>
+      <div class="panel panel-default">
+        <h4>You haven't created any listings yet.</h4>
+      </div>
     <% end %>
-  </tbody>
-</table>
- -->
-
- <% @listings.each do |listing| %>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4>
-        <span style="font-family: 'Ubuntu', sans-serif;">
-          <%= listing.name %> / $<%= listing.rate %> <light>each day</light>
-          <span class="pull-right">
-            <%= listing.category %>
-            <%= link_to "RENT", listing, :class => 'btn btn-scenius' %>  
-          </span>
-        </span>
-      </h4>
-    </div>
-    <div class="panel-body">
-      <div class="row">
-        <div class="col-xs-3">
-          <%= image_tag listing.listing_images.first.image.url(:thumb), :class => "img-circle" unless listing.listing_images.blank?%>
+    </center>
+     <% @listings.each do |listing| %>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4>
+            <span style="font-family: 'Ubuntu', sans-serif;">
+              <%= listing.name %> / $<%= listing.rate %> <light>each day</light>
+              <span class="pull-right">
+                <%= listing.category %>
+                <%= link_to "RENT", listing, :class => 'btn btn-scenius' %>  
+              </span>
+            </span>
+          </h4>
         </div>
-        <div class="col-xs-4">
-          <%= listing.description %>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-xs-3">
+              <%= image_tag listing.listing_images.first.image.url(:thumb), :class => "img-circle" unless listing.listing_images.blank?%>
+            </div>
+            <div class="col-xs-4">
+              <%= listing.description %>
+            </div>
+            <div class="col-xs-4">
+              <%= listing.user.username %>
+              <%= listing.user.zipcode %>
+              <%= link_to 'Show', listing %>
+              <%= link_to 'Edit', edit_listing_path(listing) %>
+              <%= link_to 'Destroy', listing, method: :delete, data: { confirm: 'Are you sure?' } %>
+            </div>
+          </div
         </div>
-        <div class="col-xs-4">
-          <%= listing.user.username %>
-          <%= listing.user.zipcode %>
-          <%= link_to 'Show', listing %>
-          <%= link_to 'Edit', edit_listing_path(listing) %>
-          <%= link_to 'Destroy', listing, method: :delete, data: { confirm: 'Are you sure?' } %>
-        </div>
-      </div
+      </div>
+      </div>
+    <% end %>
+    <div class="well">
+      <center>
+        <h4>Make money from your musical equipment without selling it.</h4>
+      </center>
+      <%= link_to "Rent it on Scenius", new_listing_path, :class => "btn btn-scenius btn-rent-it btn-block" %>
     </div>
   </div>
-  </div>
-<% end %>
-
-<%= link_to 'New Listing', new_listing_path %>
+</div>
