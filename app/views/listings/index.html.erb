@@ -15,27 +15,35 @@
           <h4>
             <span style="font-family: 'Ubuntu', sans-serif;">
               <%= listing.name %> / $<%= listing.rate %> <light>each day</light>
-              <span class="pull-right">
+              <span class="pull-right form-buttons">
                 <%= listing.category %>
-                <%= link_to "RENT", listing, :class => 'btn btn-scenius' %>  
+                <% if listing.user == current_user %>
+                  <%= link_to 'Edit', edit_listing_path(listing), :class => 'btn btn-info' %>
+                  <%= link_to 'Destroy', listing, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-warning' %>
+                <% else %>
+                  <%= link_to "RENT", listing, :class => 'btn btn-scenius' %>
+                <% end %>
               </span>
             </span>
           </h4>
         </div>
         <div class="panel-body">
           <div class="row">
-            <div class="col-xs-3">
-              <%= image_tag listing.listing_images.first.image.url(:thumb), :class => "img-circle" unless listing.listing_images.blank?%>
+            <div class="col-sm-3">
+              <center>
+                <%= link_to (image_tag listing.listing_images.first.image.url(:thumb), :class => "img-circle"), listing unless listing.listing_images.blank?%>
+              </center>
             </div>
-            <div class="col-xs-4">
+            <div class="col-sm-5">
               <%= listing.description %>
             </div>
-            <div class="col-xs-4">
-              <%= listing.user.username %>
-              <%= listing.user.zipcode %>
-              <%= link_to 'Show', listing %>
-              <%= link_to 'Edit', edit_listing_path(listing) %>
-              <%= link_to 'Destroy', listing, method: :delete, data: { confirm: 'Are you sure?' } %>
+            <div class="col-sm-4">
+              <center>
+                <%= link_to (image_tag listing.user.fetch_avatar, :class => "img-circle"), listing.user  %><br>
+                <%= listing.user.name %><br>
+                <%= listing.user.city %><br>
+                <%= listing.user.zipcode %><br>
+              </center>
             </div>
           </div
         </div>

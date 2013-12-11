@@ -69,6 +69,7 @@ gem 'geocoder'
 gem 'ransack'
 gem 'bootstrap-sass', '~> 3.0.3.0'
 gem 'bootstrap-datepicker-rails'
-gem 'seed_dump'
+gem 'delayed_job_active_record'
+
 # Ruby 2 w00t
 ruby "2.0.0"

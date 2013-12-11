@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1><%= @booking.sender.name.capitalize %> wants to rent <%= @booking.listing.name %>!</h1>
+    <p>
+      The requested rental period is from <% @booking.start_date.to_formatted_s(:short) %> to <% @booking.end_date.to_formatted_s(:short) %>.
+    <p>
+      To respond, accept or reject this request, please follow this link: <%= booking_url(@booking) %>
+    </p>
+    <p>Thanks!</p>
+    <p> - Team Scenius </p>
+  </body>
+</html>

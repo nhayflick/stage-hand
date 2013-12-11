@@ -24,6 +24,10 @@ class Booking < ActiveRecord::Base
       transition :accepted => :paid
     end
 
+    event :cancel do
+      
+    end
+
     after_transition :requested => :accepted, :do => :record_acceptance
     after_transition :requested => :accepted, :do => :send_accepted_notification
     after_transition :accepted => :paid, :do => :record_payment
@@ -48,6 +52,18 @@ class Booking < ActiveRecord::Base
   end
 
   # ------------------------------
+  # Delayed_Jobs
+  # ------------------------------
+
+  def send_new_booking_email
+    BookingMailer.delay(run_at: 2.minutes.from_now).booking_requested_email(self)
+  end
+  
+  def cancel_if_not_paid
+    self.booking
+  end
+
+  # ------------------------------
   # Controller Methods
   # ------------------------------
 
@@ -61,6 +77,7 @@ class Booking < ActiveRecord::Base
 
   def send_request_notification
     self.notifications.create(title: 'New Booking!', body: "#{self.sender.name.capitalize} sent a request for #{self.listing.name}", recipient_id: self.recipient.id)
+    self.send_new_booking_email
   end
 
   def send_accepted_notification(booking)
