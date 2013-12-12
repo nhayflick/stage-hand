@@ -28,11 +28,22 @@ StageHand::Application.configure do
   config.assets.debug = true
 
   # For Devise Rails
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  config.action_mailer.default_url_options = { :host => 'scenius-dev.heroku.com' }
 
    #Use Wepay Stage Environment
   CLIENT_ID = ENV['CLIENT_ID']
   CLIENT_SECRET = ENV['CLIENT_SECRET']
   USE_STAGE = true
   WEPAY = WePay.new(CLIENT_ID, CLIENT_SECRET, USE_STAGE)
+
+    #Mandrill Setup
+    ActionMailer::Base.smtp_settings = {
+      :port =>           '587',
+      :address =>        'smtp.mandrillapp.com',
+      :user_name =>      ENV['MANDRILL_USERNAME'],
+      :password =>       ENV['MANDRILL_APIKEY'],
+      :domain =>         'heroku.com',
+      :authentication => :plain
+    }
+    ActionMailer::Base.delivery_method = :smtp
 end

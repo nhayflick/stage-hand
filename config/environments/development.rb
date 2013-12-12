@@ -35,4 +35,15 @@ StageHand::Application.configure do
   CLIENT_SECRET = ENV['CLIENT_SECRET']
   USE_STAGE = true
   WEPAY = WePay.new(CLIENT_ID, CLIENT_SECRET, USE_STAGE)
+
+  #Mandrill Setup
+  ActionMailer::Base.smtp_settings = {
+    :port =>           '587',
+    :address =>        'smtp.mandrillapp.com',
+    :user_name =>      ENV['MANDRILL_USERNAME'],
+    :password =>       ENV['MANDRILL_APIKEY'],
+    :domain =>         'localhost:3000',
+    :authentication => :plain
+  }
+  ActionMailer::Base.delivery_method = :smtp
 end
