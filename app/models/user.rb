@@ -21,6 +21,8 @@ class User < ActiveRecord::Base
     medium: '300x300>'
   }
 
+  process_in_background :avatar
+
   after_create :send_welcome_notification
 
   def self.with_nearby_listings

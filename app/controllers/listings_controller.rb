@@ -7,11 +7,11 @@ class ListingsController < ApplicationController
   # GET /listings.json
   def index
     @q = Listing.search(params[:q])
-    if params[:zipcode] && params[:category]
+    if params[:zipcode].length > 0 && params[:category].length > 0
       @listings = Listing.joins(:user).near(params[:zipcode], 50).where(:category => params[:category]).includes(:listing_images)
-    elsif params[:zipcode]
+    elsif params[:zipcode].length > 0
        @listings = Listing.joins(:user).near(params[:zipcode], 50)
-    elsif params[:category]
+    elsif params[:category].length > 0
       @listings = Listing.where(:category => params[:category])
     else
       @listings = Listing.all

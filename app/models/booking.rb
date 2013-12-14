@@ -92,7 +92,7 @@ class Booking < ActiveRecord::Base
       BookingMailer.delay.booking_unpaid_and_canceled_email(self)
     end
   end
-  handle_asynchronously :cancel_if_not_paid, :run_at => Proc.new { 1.day.from_now }
+  # handle_asynchronously :cancel_if_not_paid, :run_at => Proc.new { 1.day.from_now }
 
 
 
