@@ -23,6 +23,10 @@ class User < ActiveRecord::Base
 
   after_create :send_welcome_notification
 
+  def self.with_nearby_listings
+    joins(:listings).merge( Listing )
+  end
+
   # -----------------------
   # Omniauth methods
   # -----------------------

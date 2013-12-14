@@ -7,10 +7,12 @@ class ListingsController < ApplicationController
   # GET /listings.json
   def index
     @q = Listing.search(params[:q])
-    if params[:zipcode]
-      @listings = User.near(params[:zipcode], 10).listings
-      # @q = Listing.search(params[:q])
-      # @listings = @q.result(distinct: true)
+    if params[:zipcode] && params[:category]
+      @listings = Listing.joins(:user).near(params[:zipcode], 50).where(:category => params[:category]).includes(:listing_images)
+    elsif params[:zipcode]
+       @listings = Listing.joins(:user).near(params[:zipcode], 50)
+    elsif params[:category]
+      @listings = Listing.where(:category => params[:category])
     else
       @listings = Listing.all
     end
@@ -85,6 +87,13 @@ class ListingsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_listing
       @listing = Listing.find(params[:id])
+    end
+
+    def search_listings
+      if params[:zipcode] || params[:category]
+
+        @listings
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

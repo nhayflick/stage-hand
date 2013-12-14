@@ -6,7 +6,7 @@
 		<%= form_tag listings_path, :method => 'get', :class => 'form-inline' do %>  
 		  <div class="search-container well">  
 		  	<div class="form-group">
-		   	  <%= text_field_tag :search, params[:search], :class => 'form-control', :placeholder => 'Zipcode' %>  
+		   	  <%= text_field_tag :zipcode, params[:zipcode], :class => 'form-control', :placeholder => 'Zipcode' %>  
 		   	</div>
 		   	<div class="form-group">
 		   	  <%= select_tag :category, options_for_select(Listing.categories.map {|value| [value, value] }), :class => 'form-control' %>

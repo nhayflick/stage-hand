@@ -12,6 +12,9 @@ class Listing < ActiveRecord::Base
 
 	accepts_nested_attributes_for :listing_images, reject_if: :all_blank
 
+	geocoded_by "user.zipcode"
+ 	reverse_geocoded_by "users.latitude", "users.longitude"
+
 	def has_images?
 		errors.add(:base, "Please upload at least one image for potential renters to check out.") if self.listing_images.blank?
 	end
@@ -19,4 +22,5 @@ class Listing < ActiveRecord::Base
 	def self.categories
 		return ['Synthesizer', 'Guitar', 'Bass', 'Drums/Percussion', 'Pedal/Effects Unit', 'Speaker', 'Amplifier', 'Keyboard', 'Midi Controller', 'Mixer', 'Microphone', 'Other']
 	end
+
 end
