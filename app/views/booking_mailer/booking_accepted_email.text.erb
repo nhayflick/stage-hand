@@ -1,0 +1,4 @@
+<%= @booking.recipient.name.capitalize %> accepted your rental request for <%= @booking.listing.name %>!
+============================================================
+
+The requested rental period is from <%= @booking.start_date.to_formatted_s(:short) %> to <%= @booking.end_date.to_formatted_s(:short) %>. This booking will be held for you for 24 hours. To confirm please log in to your Scenius account and enter your payment information.

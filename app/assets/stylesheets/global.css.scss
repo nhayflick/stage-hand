@@ -63,7 +63,28 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+.btn-facebook {
+	background-color: #3B5998;
+	color: white;
+}
+
+.facebook {
+	color: #3B5998;
+}
+
+.btn-facebook:hover {
+	background-color: #8b9dc3;
+	color: white;
+	.facebook{
+		color: #8b9dc3;
+	}
+}
+
 .nav-avatar{
 	height: 50px;
 	width: 50px;
+}
+
+.scenius-form{
+	width: 280px;
 }

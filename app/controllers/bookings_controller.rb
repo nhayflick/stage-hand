@@ -84,8 +84,8 @@ class BookingsController < ApplicationController
     if (params['error'] && params['error_description'])
       return redirect_to @booking, alert: "Error - #{params['error_description']}"
     end
-    @booking.pay
-    redirect_to @booking, notice: "Thanks for the payment! You should receive a confirmation email shortly."
+    @booking.collect_payment
+    redirect_to @booking, notice: "Your payment info was recieved! You should receive a confirmation email shortly."
   end
 
   private
@@ -118,6 +118,7 @@ class BookingsController < ApplicationController
             redirect_to @booking, notice: 'Booking was accepted!'
             return false
           when 'cancel'
+            @booking.cancel
             puts 'cancel'
             return false
           else

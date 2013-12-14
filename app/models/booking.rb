@@ -20,18 +20,29 @@ class Booking < ActiveRecord::Base
       transition :requested => :accepted
     end
 
-    event :pay do
-      transition :accepted => :paid
+    event :collect_payment do
+      transition :accepted => :payment_collected
     end
 
-    event :cancel do
-      
+    event :deny do
+      transition [:requested, :accepted] => :denied
+    end
+
+    event :start do
+      transition :paid => :canceled
     end
 
     after_transition :requested => :accepted, :do => :record_acceptance
     after_transition :requested => :accepted, :do => :send_accepted_notification
-    after_transition :accepted => :paid, :do => :record_payment
-    after_transition :accepted => :paid, :do => :send_payment_notification
+    after_transition :accepted => :payment_collected, :do => :record_payment
+    after_transition :accepted => :payment_collected, :do => :send_payment_notification
+
+    # around_transition on: :collect_payment do |booking, transition, block|
+    #   booking.transition do
+    #     block.call # block is an event's proc. we need to perform it
+    #     booking.pay_author!
+    #   end
+    # end
   end
 
   def no_overlaps
@@ -56,12 +67,34 @@ class Booking < ActiveRecord::Base
   # ------------------------------
 
   def send_new_booking_email
-    BookingMailer.delay(run_at: 2.minutes.from_now).booking_requested_email(self)
+    BookingMailer.delay.booking_requested_email(self)
+  end
+
+  def send_booking_accepted_email
+    BookingMailer.delay.booking_accepted_email(self)
+  end
+
+  def send_booking_canceled_email
+    BookingMailer.delay.booking_canceled_email(self)
+  end
+
+  def send_booking_reminder_email
+    BookingMailer.delay.booking_reminder_email(self)
+  end
+
+  def send_booking_completed_email
+    BookingMailer.delay.booking_completed_email(self)
   end
   
   def cancel_if_not_paid
-    self.booking
+    if (self.state == 'accepted')
+      self.cancel
+      BookingMailer.delay.booking_unpaid_and_canceled_email(self)
+    end
   end
+  handle_asynchronously :cancel_if_not_paid, :run_at => Proc.new { 1.day.from_now }
+
+
 
   # ------------------------------
   # Controller Methods

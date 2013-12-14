@@ -29,8 +29,8 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
 
 group :development do
-  gem "better_errors"
-  gem "binding_of_caller"
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
 group :production do
@@ -69,7 +69,8 @@ gem 'geocoder'
 gem 'ransack'
 gem 'bootstrap-sass', '~> 3.0.3.0'
 gem 'bootstrap-datepicker-rails'
+gem 'font-awesome-rails'
 gem 'delayed_job_active_record'
 
 # Ruby 2 w00t
-ruby "2.0.0"
+ruby '2.0.0'
