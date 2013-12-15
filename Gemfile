@@ -69,8 +69,8 @@ gem 'ransack'
 gem 'bootstrap-sass', '~> 3.0.3.0'
 gem 'bootstrap-datepicker-rails'
 gem 'font-awesome-rails'
-gem 'sidekiq'
 gem 'redis'
+gem 'sidekiq'
 gem 'delayed_paperclip'
 
 # Ruby 2 w00t
