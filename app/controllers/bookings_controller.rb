@@ -2,7 +2,7 @@ class BookingsController < ApplicationController
   before_action :set_booking, only: [:show, :edit, :update, :destroy, :pay, :payment_success]
   before_action :detect_change_state, only: :update
   before_action :set_scope, only: :index
-  before_action :authenticate_user!, only: [:show, :index, :new, :create, :edit, :update, :destroy, :pay, :payment_success]
+  before_action :is_allowed_user, only: [:show, :create, :update, :destroy ]
 
   # GET /bookings
   # GET /bookings.json
@@ -111,7 +111,6 @@ class BookingsController < ApplicationController
     end
 
     def detect_change_state
-      puts "detecting"
       case params[:booking][:state]
           when 'accept'
             @booking.accept
@@ -128,7 +127,12 @@ class BookingsController < ApplicationController
       end
     end
 
-    def authenticate_user!
-
+    def is_allowed_user?
+      if current_user != @booking.sender && current_user != @booking.recipient
+        redirect_to root_path
+        return false
+      else
+        return true
+      end
     end
 end
