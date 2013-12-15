@@ -27,6 +27,9 @@ StageHand::Application.configure do
   # number of complex assets.
   config.assets.debug = true
 
+  config.assets.initialize_on_precompile = false
+
+
   # For Devise Rails
   config.action_mailer.default_url_options = { :host => 'scenius-dev.heroku.com' }
 

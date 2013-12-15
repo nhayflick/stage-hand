@@ -36,6 +36,9 @@ StageHand::Application.configure do
   USE_STAGE = true
   WEPAY = WePay.new(CLIENT_ID, CLIENT_SECRET, USE_STAGE)
 
+  #Redis ENV
+  ENV["REDISTOGO_URL"] = 'redis://username:password@my.host:6389'
+
   #Mandrill Setup
   ActionMailer::Base.smtp_settings = {
     :port =>           '587',
