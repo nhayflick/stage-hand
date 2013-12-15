@@ -1,1 +1,1 @@
-worker:  bundle exec sidekiq -q paperclip
+worker: bundle exec sidekiq -e production -C config/sidekiq.yml
