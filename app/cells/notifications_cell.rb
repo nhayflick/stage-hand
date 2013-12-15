@@ -4,7 +4,15 @@ class NotificationsCell < Cell::Rails
   	@user = args[:user]
   	@notifications = @user.notifications
 
-    render
+  	respond_to do |format|
+	  	format.html  do
+	      if request.xhr?
+	        render
+	      else
+	        render
+	      end
+	    end
+	end
   end
 
 end

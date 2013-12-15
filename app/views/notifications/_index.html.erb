@@ -1,0 +1,4 @@
+<% @notifications.each do |notification| %>
+	<li class="notification <%= 'unread-notification' unless notification.viewed %>"><%= link_to raw(notification.title + "<br>" + notification.body), notification.notifiable %>
+	</li>
+<% end %>

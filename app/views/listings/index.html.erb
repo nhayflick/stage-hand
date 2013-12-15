@@ -1,24 +1,32 @@
 <div class="row">
   <div class="col-sm-10 col-sm-offset-1">
     <center>
-      <h1><%= !params[:category].empty? ? params[:category].pluralize : "All listings " %><%= " near " + params[:zipcode] unless params[:zipcode].empty?%></h1>
-
-      <div class="well">
-        <%= form_tag listings_path, :method => 'get', :class => 'form-inline' do %>  
-            <div class="form-group">
-              <span>Search again: </span> 
-            </div>
-            <div class="form-group">
-              <%= text_field_tag :zipcode, params[:zipcode], :class => 'form-control', :placeholder => 'Zipcode' %>  
-            </div>
-            <div class="form-group">
-              <%= select_tag :category, options_for_select(Listing.categories.map {|value| [value.pluralize, value] }), :class => 'form-control' %>
-            </div>
-            <div class="form-group">
-              <%= submit_tag "SEARCH", :name => nil, :class => 'btn btn-scenius form-control' %>  
-            </div>
+        <% if params[:category] %>
+        <h1>
+          <%= !params[:category].empty? ? params[:category].pluralize : "All listings " %><%= " near " + params[:zipcode] unless params[:zipcode].empty?%>
+        </h1>
+        <div class="well">
+          <%= form_tag listings_path, :method => 'get', :class => 'form-inline' do %>  
+              <div class="form-group">
+                <span>Search again: </span> 
+              </div>
+              <div class="form-group">
+                <%= text_field_tag :zipcode, params[:zipcode], :class => 'form-control', :placeholder => 'Zipcode' %>  
+              </div>
+              <div class="form-group">
+                <%= select_tag :category, options_for_select(Listing.categories.map {|value| [value.pluralize, value] }), :class => 'form-control' %>
+              </div>
+              <div class="form-group">
+                <%= submit_tag "SEARCH", :name => nil, :class => 'btn btn-scenius form-control' %>  
+              </div>
+          <% end %>
+        </div>
+        <% else %>
+          <h1>
+            My Listings
+          </h1>
         <% end %>
-      </div>
+      </h1>
 
 
       <% if @listings.length == 0 %>

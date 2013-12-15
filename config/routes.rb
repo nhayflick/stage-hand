@@ -10,7 +10,9 @@ StageHand::Application.routes.draw do
   end
   resources :users, only: [:index, :show] do
     resources :bookings, shallow: true
-    resources :notifications, only: [:index]
+  end
+  resources :notifications, only: [:index] do
+    get '/render_bell' => 'notifications#render_bell', :on => :collection
   end
 
   get '/users/:action(/:user_id)', :controller => 'users'
