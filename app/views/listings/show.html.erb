@@ -1,6 +1,6 @@
 <script type="text/javascript">
   $(document).ready(function(){
-    $('.input-daterange').datepicker({format: "dd/mm/yy"});
+    $('.input-daterange').datepicker({format: "mm/dd/yy"});
     $('#booking_start_date, #booking_end_date').change(function(){
       window.scenius.calculatePrice();
     });

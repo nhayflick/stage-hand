@@ -2,7 +2,7 @@ class BookingsController < ApplicationController
   before_action :set_booking, only: [:show, :edit, :update, :destroy, :pay, :payment_success]
   before_action :detect_change_state, only: :update
   before_action :set_scope, only: :index
-  before_action :is_allowed_user?, only: [:show, :create, :update, :destroy ]
+  before_action :is_allowed_user?, only: [:show, :update, :destroy ]
 
   # GET /bookings
   # GET /bookings.json

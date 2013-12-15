@@ -72,6 +72,7 @@ gem 'font-awesome-rails'
 gem 'redis'
 gem 'sidekiq'
 gem 'delayed_paperclip'
+gem 'american_date'
 
 # Ruby 2 w00t
 ruby '2.0.0'
