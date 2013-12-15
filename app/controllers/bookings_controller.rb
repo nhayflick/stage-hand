@@ -2,6 +2,7 @@ class BookingsController < ApplicationController
   before_action :set_booking, only: [:show, :edit, :update, :destroy, :pay, :payment_success]
   before_action :detect_change_state, only: :update
   before_action :set_scope, only: :index
+  before_action :authenticate_user!, only: [:show, :index, :new, :create, :edit, :update, :destroy, :pay, :payment_success]
 
   # GET /bookings
   # GET /bookings.json
@@ -125,5 +126,9 @@ class BookingsController < ApplicationController
             puts 'no state'
             return true
       end
+    end
+
+    def authenticate_user!
+
     end
 end
