@@ -30,8 +30,10 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
 
 group :development do
+  gem 'quiet_assets'
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'foreman'
 end
 
 group :production do
@@ -74,6 +76,7 @@ gem 'redis'
 gem 'sidekiq'
 gem 'delayed_paperclip'
 gem 'american_date'
+gem 'balanced'
 
 # Ruby 2 w00t
 ruby '2.0.0'
