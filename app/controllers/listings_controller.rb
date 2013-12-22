@@ -1,8 +1,8 @@
 class ListingsController < ApplicationController
-  before_action :set_listing, only: [:show, :edit, :update, :destroy]
+  before_action :set_listing, only: [:show, :edit, :update, :destroy, :add_balanced_account]
   before_action :is_owner?, only: [:edit, :update, :destroy]
   before_action :authenticate_user!, only: [:new, :create]
-  before_action :check_wepay, only: [:new, :create]
+  before_action :check_balanced, only: [:new, :create]
   # GET /listings
   # GET /listings.json
   def index
@@ -109,10 +109,9 @@ class ListingsController < ApplicationController
       end
     end
 
-    def check_wepay
-      if !current_user.has_valid_wepay_access_token? || !current_user.has_wepay_account?
-        redirect_uri = url_for(:controller => 'users', :action => 'oauth', :user_id => @current_user.id, :host => request.host_with_port)
-        redirect_to current_user.wepay_authorization_url(redirect_uri)
+    def check_balanced
+      if !current_user.bank_account_uri?
+        redirect_to :controller => 'users', :action => 'add_balanced_account', :id => current_user.id
       end
     end
 end

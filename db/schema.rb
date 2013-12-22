@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131214212412) do
+ActiveRecord::Schema.define(version: 20131216063010) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,10 @@ ActiveRecord::Schema.define(version: 20131214212412) do
     t.datetime "paid_at"
     t.datetime "canceled_at"
     t.string   "state"
+    t.string   "debit_uri"
+    t.string   "credit_uri"
+    t.integer  "price"
+    t.integer  "deposit_price", default: 0
   end
 
   create_table "listing_images", force: true do |t|
@@ -48,6 +52,7 @@ ActiveRecord::Schema.define(version: 20131214212412) do
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "deposit_price", default: 0
   end
 
   create_table "notifications", force: true do |t|
@@ -104,6 +109,9 @@ ActiveRecord::Schema.define(version: 20131214212412) do
     t.string   "facebook_url"
     t.string   "city"
     t.string   "state"
+    t.integer  "soundcloudID"
+    t.string   "bank_account_uri"
+    t.string   "customer_uri"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

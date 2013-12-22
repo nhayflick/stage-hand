@@ -13,3 +13,5 @@ jQuery ->
 	    	$('#notifications').html(response)
 	  );
 	return false;
+
+	

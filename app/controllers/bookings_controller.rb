@@ -28,9 +28,12 @@ class BookingsController < ApplicationController
   # POST /bookings
   # POST /bookings.json
   def create
+    marketplace = Balanced::Marketplace.my_marketplace
+
     @booking = Booking.new(booking_params)
     @booking.sender = current_user
     @booking.listing_id = params[:listing_id]
+    @booking.calculate_price
 
     respond_to do |format|
       if @booking.save
@@ -107,7 +110,7 @@ class BookingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def booking_params
-      params.require(:booking).permit(:note, :start_date, :end_date)
+      params.require(:booking).permit(:note, :start_date, :end_date, :credit_uri)
     end
 
     def detect_change_state

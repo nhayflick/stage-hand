@@ -10,4 +10,24 @@ class BookingMailer < ActionMailer::Base
   	@booking = booking
   	mail(to: @booking.sender.email, subject: 'Your Scenius Booking Request Was Accepted!')
   end
+
+  def booking_remind_owner_email(booking)
+    @booking = booking
+    mail(to: @booking.recipient.email, subject: 'Your Scenius Rental is Today!')
+  end
+
+  def booking_remind_renter_email(booking)
+    @booking = booking
+    mail(to: @booking.sender.email, subject: 'Your Scenius Rental is Today!')
+  end
+
+  def booking_canceled_email(booking)
+    @booking = booking
+    mail(to: @booking.sender.email, subject: 'Scenius Booking Canceled')
+  end
+
+  def booking_payment_failed_email(booking)
+    @booking = booking
+    mail(to: @booking.sender.email, subject: 'Scenius Booking Failed')
+  end
 end

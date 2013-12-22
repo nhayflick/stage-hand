@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h4><%= @booking.recipient.name.capitalize %> accepted your rental request for <%= @booking.listing.name %>!</h4>
+
+    <p>The requested rental period is from <%= @booking.start_date.to_formatted_s(:short) %> to <%= @booking.end_date.to_formatted_s(:short) %>.</p>
+    <p>This booking will be held for you for 24 hours. To confirm please log in to your Scenius account and enter your payment information.</p>
+    <p>Thanks!</p>
+    <p> - Team Scenius </p>
+  </body>
+</html>

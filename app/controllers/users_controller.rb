@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :add_balanced_account, :create_balanced_account]
 
   # GET /users
   # GET /users.json
@@ -26,7 +26,7 @@ class UsersController < ApplicationController
   def create
     respond_to do |format|
       if @user.save
-        format.html { redirect_to url_for(:controller => 'users', :action => 'oauth'), notice: 'User was successfully created.' }
+        format.html { redirect_to url_for(:controller => 'users', :action => 'add_balanced_account'), notice: 'User was successfully created.' }
         format.json { render action: 'show', status: :created, location: @user.listing }
       else
         format.html { render action: 'new' }
@@ -59,28 +59,23 @@ class UsersController < ApplicationController
     end
   end
 
-  # GET /users/oauth/1
-  def oauth
-    if !params[:code]
-      return redirect_to('/')
-    end
+  # GET /users/1/add_balanced_account
+  def add_balanced_account
+  end
 
-    redirect_uri = url_for(:controller => 'users', :action => 'oauth', :user_id => params[:user_id], :host => request.host_with_port)
-    
-    @user = User.find(params[:user_id])
-    puts redirect_uri
-    begin
-      @user.request_wepay_access_token(params[:code], redirect_uri)
-    rescue Exception => e
-      error = e.message
-    end
-
-    if error
-      redirect_to listings_path, alert: error
-    else
-      redirect_to new_listing_path, notice: 'We successfully connected you to WePay!'
+  def create_balanced_account
+    @user.balanced_customer.add_bank_account(user_params[:bank_account_uri])
+    respond_to do |format|
+      if @user.update(user_params)
+        format.html { redirect_to new_listing_path, notice: 'Bank account was successfully added.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: 'new_balanced_account' }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
     end
   end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -90,7 +85,7 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:avatar, :name, :zipcode)
+      params.require(:user).permit(:avatar, :name, :zipcode, :bank_account_uri)
     end
 
 end

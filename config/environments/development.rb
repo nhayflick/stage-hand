@@ -39,6 +39,9 @@ StageHand::Application.configure do
   #Redis ENV
   # ENV["REDISTOGO_URL"] = 'redis://username:password@my.host:6379'
 
+  #Use Balanced
+  Balanced.configure(ENV['BALANCED_SECRET'])
+
   #Mandrill Setup
   ActionMailer::Base.smtp_settings = {
     :port =>           '587',

@@ -9,6 +9,8 @@ StageHand::Application.routes.draw do
     resources :replies, shallow: true
   end
   resources :users, only: [:index, :show] do
+    get '/add_balanced_account' => 'users#add_balanced_account', :on => :member
+    patch '/create_balanced_account' => 'users#create_balanced_account', :on => :member
     resources :bookings, shallow: true
   end
   resources :notifications, only: [:index] do

@@ -17,3 +17,16 @@
 //= require bootstrap
 //= require bootstrap-datepicker
 //= require_tree .
+
+var marketplaceUri = '/v1/marketplaces/TEST-MP2FOG8MNXsCxbD7ewtUnk5y';
+balanced.init(marketplaceUri);
+
+// var csrf = '<%= "#{ENV['BALANCED_CSRF']}" %>'
+// var marketplaceUri = '<%= "#{ENV['BALANCED_MARKETPLACE_URI']}" %>'
+// //  kick everything off when jquery is ready
+// $(function () {
+//     rentmybike.init({
+//         csrfToken:csrf,
+//         marketplaceUri:marketplaceUri
+//     });
+// });

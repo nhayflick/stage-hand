@@ -1,4 +1,9 @@
 class Booking < ActiveRecord::Base
+
+  def self.add_scenius_fee(price)
+    1.15 * price
+  end
+
   validates :sender, :listing, presence: :true
   validate :no_overlaps, :valid_dates, on: :create
 
@@ -21,28 +26,47 @@ class Booking < ActiveRecord::Base
     end
 
     event :collect_payment do
-      transition :accepted => :payment_collected
+      transition :accepted => :paid
+    end
+
+    event :deny_transaction do
+      transition :accepted => :denied
     end
 
     event :deny do
       transition [:requested, :accepted] => :denied
     end
 
+    event :cancel do
+      transition [:requested, :accepted, :paid] => :cancel
+    end
+
     event :start do
-      transition :paid => :canceled
+      transition :paid => :started
+    end
+
+    event :credit do
+      transition :started => :credited
+    end
+
+    event :settle do
+      transition :credited => :completed
     end
 
     after_transition :requested => :accepted, :do => :record_acceptance
     after_transition :requested => :accepted, :do => :send_accepted_notification
-    after_transition :accepted => :payment_collected, :do => :record_payment
-    after_transition :accepted => :payment_collected, :do => :send_payment_notification
+    after_transition :requested => :accepted, :do => :transact
+    after_transition :accepted => :paid, :do => :record_payment
+    after_transition :accepted => :paid, :do => :send_payment_notification
+    after_transition :accepted => :paid, :do => :schedule_booking
 
-    # around_transition on: :collect_payment do |booking, transition, block|
+    # around_transition on: :accept do |booking, transition, block|
     #   booking.transition do
     #     block.call # block is an event's proc. we need to perform it
     #     booking.pay_author!
     #   end
     # end
+
   end
 
   def no_overlaps
@@ -79,18 +103,20 @@ class Booking < ActiveRecord::Base
   end
 
   def send_booking_reminder_email
-    BookingMailer.delay.booking_reminder_email(self)
+    BookingMailer.delay.booking_remind_owner_email(self)
+    BookingMailer.delay.booking_remind_renter_email(self)
   end
 
   def send_booking_completed_email
     BookingMailer.delay.booking_completed_email(self)
   end
   
-  def cancel_if_not_paid
-    if (self.state == 'accepted')
-      self.cancel
-      BookingMailer.delay.booking_unpaid_and_canceled_email(self)
-    end
+  def send_payment_failed_email
+    BookingMailer.delay.booking_payment_failed_email(self)
+  end
+
+  def schedule_booking
+    BookingMailer.delay.booking_remind_owner_email(self)
   end
   # handle_asynchronously :cancel_if_not_paid, :run_at => Proc.new { 1.day.from_now }
 
@@ -104,6 +130,13 @@ class Booking < ActiveRecord::Base
   	(user.requested_bookings + user.bookings).sort{|a,b| a.created_at <=> b.created_at }
   end
 
+  def calculate_price
+    length = self.end_date - self.start_date
+    price = Booking.add_scenius_fee((length * self.listing.rate + self.listing.deposit_price) * 100)
+    self.price = price
+    self.deposit_price = self.listing.deposit_price
+  end
+
   # ------------------------------
   # Notification Methods
   # ------------------------------
@@ -114,7 +147,7 @@ class Booking < ActiveRecord::Base
   end
 
   def send_accepted_notification(booking)
-    self.notifications.create(title: 'Booking Accepted!', body: "#{self.recipient.name.capitalize} accepted your booking request for #{self.listing.name}. Enter your payment info to confirm your reservation!", recipient_id: self.sender.id)
+    self.notifications.create(title: 'Booking Accepted!', body: "#{self.recipient.name.capitalize} accepted your booking request for #{self.listing.name}. Your payment has been processed in order to hold your booking reservation.", recipient_id: self.sender.id)
   end
 
   def send_payment_notification(booking)
@@ -134,35 +167,72 @@ class Booking < ActiveRecord::Base
   end
 
   # ------------------------------
-  # Wepay Methods
+  # Balanced Methods
   # ------------------------------
 
-  def create_checkout(redirect_uri)
-    duration = (self.end_date - self.start_date).to_i
-    total_cost = self.listing.rate.to_i * duration
-
-    # calculate app_fee as 15% of produce price
-    app_fee = total_cost * 0.15
-
-    params = { 
-      :account_id => self.recipient.wepay_account_id, 
-      :short_description => "Scenius equipment rental of #{self.listing.name} from #{self.start_date} to #{self.end_date}.",
-      :type => :SERVICE,
-      :amount => total_cost,      
-      :app_fee => app_fee,
-      :fee_payer => :payee,     
-      :mode => :iframe,
-      :redirect_uri => redirect_uri
-    }
-    response = WEPAY.call('/checkout/create', self.recipient.wepay_access_token, params)
-
-    if !response
-      raise "Error - no response from WePay"
-    elsif response['error']
-      raise "Error - " + response["error_description"]
+  def transact
+    renter = self.sender.balanced_customer
+    owner = self.recipient.balanced_customer
+    
+    if !renter.add_card(self.credit_uri)
+       # raise "Error - Card failed."
+       return self.transaction_failed
     end
 
-    return response
+    # debit buyer amount of listing
+
+    debit = renter.debit(
+        :amount => self.price,
+        :description => "Scenius Rental (#{self.start_date.to_formatted_s} to #{self.end_date.to_formatted_s}) #{self.listing.name} from #{self.recipient.name}",
+        :on_behalf_of => owner,
+    )
+
+    if !debit
+      # raise "Error - Debit failed."
+      return self.transaction_failed
+    end
+
+    self.debit_uri = debit.debit_uri
+    self.save
+
+    # # credit owner of bicycle amount of listing
+
+    # credit = owner.credit(
+    #   :amount => 100,
+    #   :description => "Scenius Rental (#{self.start_date.to_formatted_s} to #{self.end_date.to_formatted_s}) #{self.listing.name} from #{self.sender.name}",
+    # )
+
+    # if !credit
+    #   raise "Error - Credit failed."
+    # end
+
+    self.collect_payment
+  end
+
+  def transaction_failed
+    self.notifications.create(title: 'Transaction Failed!', body: "This booking has been canceled automatically because the payment from #{self.sender.name.capitalize} failed!", recipient_id: self.recipient.id)
+    self.notifications.create(title: 'Transaction Failed!', body: "This booking has been canceled automatically because your payment to #{self.recipient.name.capitalize} failed! Please make sure you are using a valid credit card and try again.", recipient_id: self.recipient.id)
+    self.send_payment_failed_email
+    self.deny_transaction
+  end
+
+  def pay_owner
+    credit = owner.credit(
+      :amount => self.price,
+      :description => "Scenius Rental (#{self.start_date.to_formatted_s} to #{self.end_date.to_formatted_s}) #{self.listing.name} from #{self.sender.name}",
+    )
+
+    if !credit
+      raise "Error - Credit failed."
+    end
+  end
+
+  def settle_deposit
+    debit = Balanced::Debit.find(self.debit_uri)
+    debit.refund(
+      :amount => self.deposit_price
+      :description => 'Scenius Damage Deposit Refund'
+    )
   end
 
 end
