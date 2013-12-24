@@ -1,6 +1,6 @@
 <script type="text/javascript">
   $(document).ready(function(){
-    $('.input-daterange').datepicker({format: "mm/dd/yy"});
+    $('.input-daterange').datepicker({format: "mm/dd/yyyy"});
     $('#booking_start_date, #booking_end_date').change(function(){
       window.scenius.calculatePrice();
     });
@@ -15,14 +15,14 @@
   <div class="col-sm-10 col-sm-offset-1">
     <div class="panel panel-default">
       <div class="panel-heading">
-          <h2>
+          <h4>
             <span style="font-family: 'Ubuntu', sans-serif;">
               <%= @listing.name %> / $<%= @listing.rate %> <light>each day</light>
               <span class="pull-right">
                 <%= @listing.category %>
               </span>
             </span>
-          </h2>
+          </h4>
       </div>
       <div class="panel-body">
         <div class="row">
@@ -63,6 +63,22 @@
                 <br>
               </div>
             </center>
+            <br />
+            <div style="padding: 0 10px">
+              <blockquote>
+                <p>
+                  <%= @listing.description %>
+                </p>
+              </blockquote>
+            </div>
+            <div class="row">
+              <center>
+                <%= link_to (image_tag @listing.user.fetch_avatar, :class => "img-circle"), @listing.user  %>
+                <h5><b><%= @listing.user.name %></b><br />
+                <%= @listing.user.city %>, <%= @listing.user.zipcode %></h5>
+                </h4>
+              </center>
+            </div>
           </div>
 
           <!-- Rental Container -->
@@ -72,9 +88,10 @@
                 <% if @booking %>
                   <div class="well" style="width: 300px;">
                     <center>
-                      <% if @booking.sender.nil? %>
-                        <h4>REQUEST A BOOKING</h4>
-                        <%= form_for [@listing, @booking], :class => 'form-inline' do |f| %>
+                      <% if !@booking.created_at?%>
+                        <div id="booking-step-1">
+                          <h4>REQUEST A BOOKING</h4>
+                          <%= form_for [@listing, @booking], remote: true, :class => 'form-inline' do |f| %>
                             <div class="form-group">
                               <div class="input-daterange">
                                 <div class="input-group">
@@ -95,55 +112,92 @@
                               <%= f.text_field :note, :class => 'form-control', :placeholder => 'Note to Owner (optional)' %>
                             </div>
                             <div class="form-group">
-                              <%= f.submit 'Send', :class => 'form-control btn-scenius' %>
+                              <%= f.submit "Next", :class => "form-control btn-scenius" %>
                             </div>
-                        <% end %>
+                          <% end %>
+                        </div>
+
+                        <div id="booking-step-2" style="display: none;">
 
                         <!-- Credit card form -->
 
-                        <form id="credit-card-form" role="form">
-                          <div class="form-group">
-                            <label>Card Number</label>
-                            <input type="text" id="cc-number" class="form-control" autocomplete="off" placeholder="4111111111111111" maxlength="16" />
-                          </div>
-                          <div class="form-group">
-                                <label>Expiration</label>
-                                <input type="text" id="cc-em" class="form-control" autocomplete="off" placeholder="01" maxlength="2" />
-                                 <input type="text" id="cc-ey" class="form-control" autocomplete="off" placeholder="2013" maxlength="4" />
-                          </div>
-                          <div class="form-group">
-                                <label>Security Code (CSC)</label>
-                                <input type="text" id="cc-csc" class="form-control" autocomplete="off" placeholder="453" maxlength="4" />
-                          </div>
-                          <a id="cc-submit" class="btn btn-large btn-primary pull-right">Submit</a>
-                        </form>
+                          <h4>ONE MORE THING...</h4>
+                          <p>We need your credit card to secure your booking - you will only be charged if the gear's owner accepts your request.</p>
+                          <hr>
+                          <form id="credit-card-form" role="form">
+                            <div class="form-group">
+                              <label>Card Number</label>
+                              <input type="text" id="cc-number" class="form-control" autocomplete="off" placeholder="4111111111111111" maxlength="16" />
+                            </div>
+                            <div class="form-inline">
+                              <div class="form-group">
+                                    <label>Expiration Date</label>
+                                    <br />
+                                    <input type="text" id="cc-em" class="form-control" autocomplete="off" placeholder="01" maxlength="2" style="width: 50px;" />
+                                    <input type="text" id="cc-ey" class="form-control" autocomplete="off" placeholder="2013" maxlength="4"  style="width: 60px;" />
+                              </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                  <label>Security Code (CSC)</label>
+                                  <input type="text" id="cc-csc" class="form-control" autocomplete="off" placeholder="453" maxlength="4" />
+                            </div>
+                            <div class="form-group">
+                              <a id="cc-submit" class="btn btn-large btn-scenius pull-right form-control">Finish</a>
+                            </div>
+                            <br /><br /><br />
+                            <img src="https://s3.amazonaws.com/stageHand-assets/static_images/credit_card_form/balanced_card_logos.png" style="width: 100%;"></img>
+                            <hr>
+                            <h6>
+                              *By clicking 'Finish' you authorize Scenius to charge your credit card for the requested rental amount. You also accept that Scenius may charge your card for the listed Damage Deposit amount and hold this amount upon the equipment is returned in its original condition upon which a full refund will be issued.
+                            </h6>
+                          </form>
+                        </div>
                       <% else %>
-                        <strong> Booking Request Sent</strong><br>
-                        <%= link_to "View", @booking %>
+                        <h4>Request Sent!</h4>
+                        <%= form_for [@booking], remote: true, :class => 'form-inline' do |f| %>
+                            <div class="form-group">
+                              <div class="input-daterange">
+                                <div class="input-group">
+                                  <%= f.text_field :start_date, :class => "form-control input-small", :name => "booking[start_date]", :placeholder => "Pick Up", :disabled => :true %> <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                </div>
+                                <br>
+                                <div class="input-group">
+                                  <%= f.text_field :end_date, :class => "form-control input-small", :name => "booking[end_date]", :placeholder => "Drop Off", :disabled => :true %><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                </div>
+                              </div>
+                            </div>
+                            <h2>
+                              <div id="live-price" data-price="<%= @listing.rate %>">
+                                $<span id="price-span"><%=@listing.rate%></span>
+                              </div>
+                            </h2>
+                            <div class="form-group">
+                              <%= f.text_field :note, :class => 'form-control', :placeholder => 'Note to Owner (optional)', :disabled => :true %>
+                            </div>
+<!--                             <%= f.hidden_field :state_event, value: 'cancel' %>
+ --><!--                             <div class="form-group">
+                              <%= f.submit 'Cancel', :class => 'form-control btn-danger' %>
+                            </div> -->
+                          <%= link_to "View More", @booking %>
+                        <% end %>
                       <% end %>
                     </center>
+                  </div>
+                <% elsif !current_user %>
+                  <div class="well">
+                    <h2>Rent It Now.</h2>
+                    <br />
+                    <a href="/users/sign_up" class="btn btn-block btn-scenius">Get a free Scenius account.</a>
                   </div>
                 <% end %>
               </p>
             </center>
           </div>
         </div>
-        <p>
-          <strong><%= @listing.user.name %> says:</strong>
-          <%= @listing.description %>
-        </p>
-
-        <center>
-          <%= link_to (image_tag @listing.user.fetch_avatar, :class => "img-circle"), @listing.user  %><br>
-          <%= @listing.user.name %><br>
-          <%= @listing.user.city %><br>
-          <%= @listing.user.zipcode %><br>
-        </center>
       </div>
-
-
-      <%= link_to 'Edit', edit_listing_path(@listing) %> |
-      <%= link_to 'Back', listings_path %>
+<!--       <%= link_to 'Edit', edit_listing_path(@listing) %> |
+      <%= link_to 'Back', listings_path %> -->
     </div>
   </div>
 </div>

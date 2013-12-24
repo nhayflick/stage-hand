@@ -16,6 +16,11 @@
 </p>
 
 <p>
+  <strong>Current Status:</strong>
+  <%= @booking.state.capitalize %>
+</p>
+
+<p>
   <strong>Note:</strong>
   <%= @booking.note %>
 </p>
@@ -28,11 +33,6 @@
 <p>
   <strong>End date:</strong>
   <%= @booking.end_date %>
-</p>
-
-<p>
-  <strong>Accepted:</strong>
-  <%= @booking.accepted_at.strftime("This booking was accepted on %B %d at %I:%M %p") if @booking.accepted_at%>
 </p>
 
 <p>
@@ -72,5 +72,3 @@
     <% end %>
   </p>
 <% end %>
-<%= link_to 'Edit', edit_booking_path(@booking) %>
-<%= link_to 'Back', user_bookings_path(current_user) %>

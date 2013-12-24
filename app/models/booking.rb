@@ -1,11 +1,13 @@
 class Booking < ActiveRecord::Base
 
+  attr_readonly :user_id, :listing_id, :note, :start_date, :end_date, :paid_at, :canceled_at, :debit_uri, :credit_uri, :price, :deposit_price
+
   def self.add_scenius_fee(price)
     1.15 * price
   end
 
   validates :sender, :listing, presence: :true
-  validate :no_overlaps, :valid_dates, on: :create
+  validate :no_overlaps, :valid_dates, :valid_card, on: :create
 
   belongs_to :listing
   belongs_to :sender, class_name: "User", foreign_key: "user_id"
@@ -83,7 +85,12 @@ class Booking < ActiveRecord::Base
   end
 
   def valid_dates
-    errors.add(:base, "Your rental must last for at least one full day.") if self.start_date >= self.end_date
+    errors.add(:base, "Your rental must last for at least one day.") if self.start_date > self.end_date
+    errors.add(:base, "No time-traveling allowed - please check your rental dates.") if self.start_date < Date.current
+  end
+
+  def valid_card
+    errors.add(:credit_uri, "must be valid") unless self.credit_uri
   end
 
   # ------------------------------
@@ -192,7 +199,7 @@ class Booking < ActiveRecord::Base
       return self.transaction_failed
     end
 
-    self.debit_uri = debit.debit_uri
+    self.debit_uri = debit.uri
     self.save
 
     # # credit owner of bicycle amount of listing
@@ -230,7 +237,7 @@ class Booking < ActiveRecord::Base
   def settle_deposit
     debit = Balanced::Debit.find(self.debit_uri)
     debit.refund(
-      :amount => self.deposit_price
+      :amount => self.deposit_price,
       :description => 'Scenius Damage Deposit Refund'
     )
   end

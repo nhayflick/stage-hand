@@ -37,10 +37,9 @@ class BookingsController < ApplicationController
 
     respond_to do |format|
       if @booking.save
-        format.html { redirect_to @booking.listing, notice: 'Booking was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @booking.listing }
+        # format.html { redirect_to @booking.listing, notice: 'Booking was successfully created.' }
+        format.json { head :no_content }
       else
-        format.html { render action: 'new' }
         format.json { render json: @booking.errors, status: :unprocessable_entity }
       end
     end
@@ -110,7 +109,7 @@ class BookingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def booking_params
-      params.require(:booking).permit(:note, :start_date, :end_date, :credit_uri)
+      params.require(:booking).permit(:note, :start_date, :end_date, :credit_uri, :state_event)
     end
 
     def detect_change_state
