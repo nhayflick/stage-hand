@@ -1,5 +1,20 @@
-<%= form_for [@booking, @reply] do |f| %>
-	<%= f.label :body, 'Message' %>
-	<%= f.text_field :body %>
-	<%= f.submit 'Send' %>
-<% end %>
+<div class="row">
+  <div class="col-sm-6 col-sm-offset-3">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <center>
+            <h4>New Message</h4>
+        </center>
+      </div>
+      <div class="panel-body">
+        Send to:<b> <%= @booking.other_party(current_user).name %></b>
+        <br />
+        <%= form_for [@booking, @reply] do |f| %>
+            <%= f.text_area :body, :class => "form-control no-resize" %>
+            <br />
+            <%= f.submit 'Send', :class => 'btn btn-primary form-control' %>
+        <% end %>
+      </div>
+</div>
+</div>
+</div>

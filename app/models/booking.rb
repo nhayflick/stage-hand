@@ -1,6 +1,6 @@
 class Booking < ActiveRecord::Base
 
-  attr_readonly :user_id, :listing_id, :note, :start_date, :end_date, :paid_at, :canceled_at, :debit_uri, :credit_uri, :price, :deposit_price
+  attr_readonly :user_id, :listing_id, :note, :start_date, :end_date, :debit_uri, :credit_uri, :price, :deposit_price
 
   def self.add_scenius_fee(price)
     1.15 * price
@@ -40,7 +40,7 @@ class Booking < ActiveRecord::Base
     end
 
     event :cancel do
-      transition [:requested, :accepted, :paid] => :cancel
+      transition [:requested, :accepted, :paid] => :canceled
     end
 
     event :start do
@@ -144,6 +144,31 @@ class Booking < ActiveRecord::Base
     self.deposit_price = self.listing.deposit_price
   end
 
+  def other_party(current_user)
+    self.sender == current_user ? self.recipient : self.sender
+  end
+
+  def bootstrap_state
+    case self.state
+    when 'requested'
+      'default'
+    when 'accepted'
+      'info'
+    when 'paid'
+      'info'
+    when 'started'
+      'warning'
+    when 'credited'
+      'warning'
+    when 'complete'
+      'success'
+    when 'canceled'
+      'danger'
+    when 'denied'
+      'danger'
+    end
+  end
+
   # ------------------------------
   # Notification Methods
   # ------------------------------
@@ -201,17 +226,6 @@ class Booking < ActiveRecord::Base
 
     self.debit_uri = debit.uri
     self.save
-
-    # # credit owner of bicycle amount of listing
-
-    # credit = owner.credit(
-    #   :amount => 100,
-    #   :description => "Scenius Rental (#{self.start_date.to_formatted_s} to #{self.end_date.to_formatted_s}) #{self.listing.name} from #{self.sender.name}",
-    # )
-
-    # if !credit
-    #   raise "Error - Credit failed."
-    # end
 
     self.collect_payment
   end

@@ -52,6 +52,7 @@ callbackHandler = (response) ->
 
 $(document).ready ->
   $("#new_booking").on("ajax:success", (e, data, status, xhr) ->
+    $('.alert').remove();
     $('#booking-step-1').show();
     $('#booking-step-2').hide();
     $("#new_booking").find('input').attr('disabled', 'disabled')
@@ -64,3 +65,10 @@ $(document).ready ->
     else if xhr.responseJSON.credit_uri && !xhr.responseJSON.base
         $('#booking-step-1').hide();
         $('#booking-step-2').show();
+
+  $('.input-daterange').datepicker({format: "mm/dd/yyyy"});
+
+  $('#booking_start_date, #booking_end_date').change ->
+    window.scenius.calculatePrice()
+  $('#cc-submit').click ->
+    window.scenius.tokenizeCard()

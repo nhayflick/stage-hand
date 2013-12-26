@@ -1,15 +1,3 @@
-<script type="text/javascript">
-  $(document).ready(function(){
-    $('.input-daterange').datepicker({format: "mm/dd/yyyy"});
-    $('#booking_start_date, #booking_end_date').change(function(){
-      window.scenius.calculatePrice();
-    });
-    $('#cc-submit').click(function(){
-      window.scenius.tokenizeCard();
-    });
-  })
-</script>
-
 <p id="notice"><%= notice %></p>
 <div class="row">
   <div class="col-sm-10 col-sm-offset-1">
@@ -108,6 +96,11 @@
                                 $<span id="price-span"><%=@listing.rate%></span>
                               </div>
                             </h2>
+                            <% if @listing.deposit_price != 0 %>
+                              <h5>
+                                Damage Deposit Required: <b>$<%= @listing.deposit_price %></b>
+                              </h5>
+                            <% end %>
                             <div class="form-group">
                               <%= f.text_field :note, :class => 'form-control', :placeholder => 'Note to Owner (optional)' %>
                             </div>

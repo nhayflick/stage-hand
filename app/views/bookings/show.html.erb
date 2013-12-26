@@ -1,74 +1,54 @@
-<p id="notice"><%= notice %></p>
+<div class="row">
+  <div class="col-sm-10 col-sm-offset-1">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3>
+          <a href="<%= user_url(@booking.other_party(current_user))%>">
+            <span class="label label-primary">
+            <%= image_tag @booking.other_party(current_user).fetch_avatar, :class => "img-rounded", :style => "width: 29px; margin-top: -4px; margin-left: -9px;" %>
+            <%= @booking.other_party(current_user).name %>
+            </span>
+          </a>&nbsp;
+          <small>
+          <b><%= @booking.listing.name %></b>
+            <%= "(" + @booking.start_date.to_formatted_s(:long_ordinal) + raw(' – ') + @booking.end_date.to_formatted_s(:long_ordinal) + ")" %>
+          </small>&nbsp;
+           <span class="label label-<%= @booking.bootstrap_state %>">
+            <b>
+              <%= @booking.state.capitalize %>
+            </b>
+          </span>
+        </h3>
+      </div>
 
-<p>
-  <strong>From:</strong>
-  <%= @booking.sender.name %>
-</p>
-
-<p>
-  <strong>To:</strong>
-  <%= @booking.recipient.name %>
-</p>
-
-<p>
-  <strong>Listing:</strong>
-  <%= @booking.listing_id %>
-</p>
-
-<p>
-  <strong>Current Status:</strong>
-  <%= @booking.state.capitalize %>
-</p>
-
-<p>
-  <strong>Note:</strong>
-  <%= @booking.note %>
-</p>
-
-<p>
-  <strong>Start date:</strong>
-  <%= @booking.start_date %>
-</p>
-
-<p>
-  <strong>End date:</strong>
-  <%= @booking.end_date %>
-</p>
-
-<p>
-  <%= render './replies/index' %>
-</p>
-
-<p>
-  <%# if (current_user.has_wepay_account? && current_user == @booking.recipient) %>
-  <% if (current_user == @booking.sender && @booking.state == 'accepted')%>
-  <br />
-  <%= link_to "Confirm with credit card!", "/bookings/pay/#{@booking.id}", :class => 'btn btn-danger btn-large', :id => 'buy-now-button' %>
-  <% end %>
-</p>
-
-<p>
-<% if @booking.state == 'paid' %>
- <strong>Booking paid for on:</strong>
-  <%= @booking.paid_at.strftime("This booking was paid for on %B %d at %I:%M %p") if @booking.paid_at%>
-<% end %>
-
-<p>
-  <%= link_to 'Reply', new_booking_reply_path(@booking) %>
-</p>
-
-<% if current_user == @booking.recipient %>
-  <p>
-    <% if @booking.accepted_at %>
-      <%= form_tag booking_path(@booking), method: :patch do %>
-        <%= hidden_field_tag 'booking[state]', 'cancel' %>
-        <%= submit_tag 'Cancel Booking' %>
+      <div class="panel-body">
+        <% if !@booking.note.blank? %>
+             <p>
+              "<%= @booking.note %>"
+              </p>
+        <% end %>
+      <% if @replies.length > 0 %>
+          <%= render './replies/index' %>
       <% end %>
-    <% else %>
-      <%= form_tag booking_path(@booking), method: :patch do %>
-        <%= hidden_field_tag 'booking[state]', 'accept' %>
-        <%= submit_tag 'Accept Booking' %>
-      <% end %>
-    <% end %>
-  </p>
-<% end %>
+        <div style="padding: 0 30%;">
+          <%= link_to 'Reply', new_booking_reply_path(@booking), :class => "btn btn-info btn-large btn-block" %><br />
+          <% if @booking.state == 'accepted' || @booking.state == 'paid' %>
+            <%= form_tag booking_path(@booking), method: :patch do %>
+              <%= hidden_field_tag 'booking[state]', 'cancel' %>
+              <%= submit_tag 'Cancel Booking', :class => "btn btn-danger btn-block" %>
+            <% end %>
+          <% elsif @booking.state == 'requested' &&  current_user == @booking.recipient %>
+            <%= form_tag booking_path(@booking), method: :patch do %>
+              <%= hidden_field_tag 'booking[state]', 'accept' %>
+              <%= submit_tag 'Accept Booking', :class => "btn btn-success btn-block" %>
+            <% end %>
+            <%= form_tag booking_path(@booking), method: :patch do %>
+              <%= hidden_field_tag 'booking[state]', 'deny' %>
+              <%= submit_tag 'Decline', :class => "btn btn-danger btn-block" %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

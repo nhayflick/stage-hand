@@ -1,7 +1,13 @@
-<% @replies.each do |reply| %>
-	<p>
-		<strong>To: </strong><%= reply.recipient.username %><br>
-		<strong>From: </strong><%= reply.sender.username %><br>
-		<strong>Message: </strong><%= reply.body %><br>
-	</p>
-<% end %>
+<ul class="list-group">
+  <li class="list-group-item">
+        <center>
+         <h4> Replies: </h4>
+        </center>
+    </li>
+  <% @replies.each do |reply| %>
+    <li class="list-group-item">
+        <b><%= reply.sender.name %></b><br />
+        <strong>"</strong><%= reply.body %>"<br />
+    </li>
+  <% end %>
+</ul>

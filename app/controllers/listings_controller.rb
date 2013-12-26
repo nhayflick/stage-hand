@@ -21,7 +21,9 @@ class ListingsController < ApplicationController
   # GET /listings/1.json
   def show
     if current_user && @listing.user != current_user
-      if current_user.bookings.where(listing_id: @listing.id).exists?
+      if current_user.bookings.where(listing_id: @listing.id,
+          :state => ['requested','accepted','paid','started','credited']
+        ).exists?
         @booking = current_user.bookings.find_by! listing_id: @listing.id
       else
         @booking = @listing.bookings.build

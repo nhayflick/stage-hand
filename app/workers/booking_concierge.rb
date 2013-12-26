@@ -6,9 +6,9 @@ class BookingConcierge
 
   recurrence { daily }
 
-  # recurrence backfill: true do
-  #   hourly
-  # end
+  recurrence backfill: true do
+    hourly
+  end
 
   def perform
     Booking.where(start_date: Date.today, state: 'paid').each do |booking|
