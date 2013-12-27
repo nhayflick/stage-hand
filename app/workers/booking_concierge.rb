@@ -10,7 +10,7 @@ class BookingConcierge
     hourly
   end
 
-  def perform
+  def perform(last_occurrence, current_occurrence)
     Booking.where(start_date: Date.today, state: 'paid').each do |booking|
         booking.send_booking_reminder_email
     end
