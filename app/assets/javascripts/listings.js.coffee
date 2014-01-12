@@ -2,9 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-window.scenius = {}
-
-window.scenius.calculatePrice = ->
+calculatePrice = ->
     start = new Date $('#booking_start_date').val()
     end = new Date $('#booking_end_date').val()
     price = $('#live-price').data('price')
@@ -12,7 +10,7 @@ window.scenius.calculatePrice = ->
     diff = if diff > 0 then diff else 1
     $('#price-span').text(diff * price)
 
-window.scenius.tokenizeCard = ->
+tokenizeCard = ->
     $form = $('#credit-card-form')
     creditCardData =
         card_number: $form.find('#cc-number').val(),
@@ -69,6 +67,6 @@ $(document).ready ->
   $('.input-daterange').datepicker({format: "mm/dd/yyyy"});
 
   $('#booking_start_date, #booking_end_date').change ->
-    window.scenius.calculatePrice()
+    calculatePrice()
   $('#cc-submit').click ->
-    window.scenius.tokenizeCard()
+    tokenizeCard()

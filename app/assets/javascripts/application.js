@@ -18,7 +18,7 @@
 //= require bootstrap-datepicker
 //= require_tree .
 
-var marketplaceUri = '/v1/marketplaces/TEST-MP2FOG8MNXsCxbD7ewtUnk5y';
+var marketplaceUri = 'v1/marketplaces/TEST-MP1gLWavWfSQDN06sADfSoW4';
 balanced.init(marketplaceUri);
 
 // var csrf = '<%= "#{ENV['BALANCED_CSRF']}" %>'

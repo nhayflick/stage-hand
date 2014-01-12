@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-window.scenius.tokenizeBank = ->
+tokenizeBank = ->
     $form = $('#bank-form')
     bankAccountData = {
         name: $form.find('#ba-name').val(),
@@ -45,3 +45,7 @@ callbackHandler = (response) ->
         when 500
             # balanced did something bad, please retry the request
             console.log(response.error)
+
+$(document).ready ->
+    $('#bank-submit').click ->
+        tokenizeBank()
