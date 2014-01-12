@@ -150,7 +150,7 @@ class User < ActiveRecord::Base
         :email  => self.email
         )
     rescue
-      customer
+      raise customer
       # raise 'There was an error fetching the Balanced customer: ' + (ENV['BALANCED_MARKETPLACE_URI'] == "/v1/marketplaces/TEST-MP2FOG8MNXsCxbD7ewtUnk5y") 
     end
 
