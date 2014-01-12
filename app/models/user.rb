@@ -144,14 +144,14 @@ class User < ActiveRecord::Base
   def balanced_customer
     return Balanced::Customer.find(self.customer_uri) if self.customer_uri
 
-    # begin
+    begin
       customer = self.class.create_balanced_customer(
         :name   => self.name,
         :email  => self.email
         )
-    # rescue
-    #   raise 'There was an error fetching the Balanced customer'
-    # end
+    rescue
+      raise 'There was an error fetching the Balanced customer'
+    end
 
     self.customer_uri = customer.uri
     self.save
@@ -159,14 +159,14 @@ class User < ActiveRecord::Base
   end
 
   def self.create_balanced_customer(params = {})
-    begin
+    # begin
       Balanced::Marketplace.mine.create_customer(
         :name   => params[:name],
         :email  => params[:email]
         )
-    rescue
-      'There was an error adding a customer'
-    end
+    # rescue
+    #   'There was an error adding a customer'
+    # end
   end
 
   # -----------------------
