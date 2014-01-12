@@ -150,7 +150,7 @@ class User < ActiveRecord::Base
         :email  => self.email
         )
     rescue
-      raise ENV['BALANCED_SECRET'] + ":" + ENV['BALANCED_MARKETPLACE_URI']
+      raise 'There was an error fetching the Balanced customer'
     end
 
     self.customer_uri = customer.uri
@@ -164,7 +164,6 @@ class User < ActiveRecord::Base
         :name   => params[:name],
         :email  => params[:email]
         )
-      return ENV['BALANCED_SECRET'] + ":" + ENV['BALANCED_MARKETPLACE_URI']
     # rescue
     #   'There was an error adding a customer'
     # end
