@@ -164,6 +164,7 @@ class User < ActiveRecord::Base
         :name   => params[:name],
         :email  => params[:email]
         )
+      return ENV['BALANCED_SECRET'] + ":" + ENV['BALANCED_MARKETPLACE_URI']
     # rescue
     #   'There was an error adding a customer'
     # end
