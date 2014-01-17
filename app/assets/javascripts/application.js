@@ -19,7 +19,7 @@
 //= require_tree .
 
 // var marketplaceUri = '<%= "#{ENV['BALANCED_MARKETPLACE_URI']}" %>'
-balanced.init('/v1/marketplaces/TEST-MP2FOG8MNXsCxbD7ewtUnk5y');
+$(function(){'/v1/marketplaces/TEST-MP2FOG8MNXsCxbD7ewtUnk5y'});
 
 // var csrf = '<%= "#{ENV['BALANCED_CSRF']}" %>'
 // var marketplaceUri = '<%= "#{ENV['BALANCED_MARKETPLACE_URI']}" %>'

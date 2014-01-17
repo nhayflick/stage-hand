@@ -43,11 +43,8 @@ StageHand::Application.configure do
     }
   }
 
-   #Use Wepay Stage Environment
-  CLIENT_ID = ENV['CLIENT_ID']
-  CLIENT_SECRET = ENV['CLIENT_SECRET']
-  USE_STAGE = true
-  WEPAY = WePay.new(CLIENT_ID, CLIENT_SECRET, USE_STAGE)
+  #Use Balanced
+  Balanced.configure(ENV['BALANCED_SECRET'])
 
     #Mandrill Setup
     ActionMailer::Base.smtp_settings = {
