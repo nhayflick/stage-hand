@@ -1,5 +1,5 @@
 <% @total_unread_notifications = current_user.notifications.where(viewed: false).length if current_user %>
 <span style='font-size: 160%; margin-top: -7px; <%= "color: orange;" if @total_unread_notifications > 0 %>' class='glyphicon glyphicon-bell'></span>
 <% if @total_unread_notifications > 0 %>
-  <span class='badge' style='background-color: orange;'><%= @total_unread_notifications.to_s %></span>
+  <span class='badge' style='background-color: orange; color: black;'><%= @total_unread_notifications.to_s %></span>
 <% end %>

@@ -55,12 +55,26 @@ class Booking < ActiveRecord::Base
       transition :credited => :completed
     end
 
+    event :cancel do
+      transition [:requested, :accepted, :paid] => :canceled
+    end
+
     after_transition :requested => :accepted, :do => :record_acceptance
     after_transition :requested => :accepted, :do => :send_accepted_notification
     after_transition :requested => :accepted, :do => :transact
+
     after_transition :accepted => :paid, :do => :record_payment
     after_transition :accepted => :paid, :do => :send_payment_notification
     after_transition :accepted => :paid, :do => :schedule_booking
+
+    after_transition :started => :credited, :do => :pay_owner
+
+    after_transition :credited => :completed, :do => :settle_deposit
+
+    after_transition :on => :cancel, :do => :send_booking_canceled_email
+    after_transition :paid => :canceled, :do => :refund_owner
+
+
 
     # around_transition on: :accept do |booking, transition, block|
     #   booking.transition do
@@ -123,7 +137,7 @@ class Booking < ActiveRecord::Base
   end
 
   def schedule_booking
-    BookingMailer.delay.booking_remind_owner_email(self)
+    # BookingMailer.delay.booking_remind_owner_email(self)
   end
   # handle_asynchronously :cancel_if_not_paid, :run_at => Proc.new { 1.day.from_now }
 
@@ -180,6 +194,7 @@ class Booking < ActiveRecord::Base
 
   def send_accepted_notification(booking)
     self.notifications.create(title: 'Booking Accepted!', body: "#{self.recipient.name.capitalize} accepted your booking request for #{self.listing.name}. Your payment has been processed in order to hold your booking reservation.", recipient_id: self.sender.id)
+    self.send_booking_accepted_email
   end
 
   def send_payment_notification(booking)
@@ -214,7 +229,7 @@ class Booking < ActiveRecord::Base
     # debit buyer amount of listing
 
     debit = renter.debit(
-        :amount => self.price,
+        :amount => self.price + self.deposit_price,
         :description => "Scenius Rental (#{self.start_date.to_formatted_s} to #{self.end_date.to_formatted_s}) #{self.listing.name} from #{self.recipient.name}",
         :on_behalf_of => owner,
     )
@@ -223,6 +238,8 @@ class Booking < ActiveRecord::Base
       # raise "Error - Debit failed."
       return self.transaction_failed
     end
+
+    raise "stop"
 
     self.debit_uri = debit.uri
     self.save
@@ -246,6 +263,14 @@ class Booking < ActiveRecord::Base
     if !credit
       raise "Error - Credit failed."
     end
+  end
+
+  def refund_owner
+    debit = Balanced::Debit.find(self.debit_uri)
+    debit.refund(
+      :amount => self.price,
+      :description => 'Scenius Booking Cancelation'
+    )
   end
 
   def settle_deposit

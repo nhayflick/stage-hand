@@ -4,14 +4,14 @@
 
 .splash-panel-1 {
 	width: 100%;
-	left: 0;
-	top: 0;
-	position: absolute;
 	height: 100%;
+	position: relative;
+	margin-top: -200px;
 	background-size: cover;
-	background-position-y: -100px;
-	z-index: -1;
-	background-image: url("https://s3.amazonaws.com/stageHand-assets/static_images/marketing_page/brutebg.jpg");
+	min-height: 600px;
+	max-height: 800px;
+	background-image: url("https://s3.amazonaws.com/stageHand-assets/static_images/marketing_page/sceniusmarketingsplash.jpg");
+	background-size: cover;
 }
 
 .splash-panel-2 {
@@ -30,13 +30,26 @@
 	left: 0;
 	position: absolute;
 	font-family: 'Ubuntu', sans-serif;
-	height: 80px;
 	bottom: 0;
-	color: #494949;
+	color: #2C2C2C;
 	padding: 20px 0;
 	font-size: 30px;
 	line-height: 40px;
-	background-color: rgb(240, 250, 244);
+	background-color: rgba(229, 228, 228, 0.83);
 	text-align: center;
+}
+
+.splash-text {
+		color: #FDFDFD;
+		text-shadow: 2px 2px #000000;
+		font-family: 'Ubuntu', sans-serif;
+		font-size: 40px;
+}
+
+// Push alerts above splash container
+.alert {
+	z-index: 1;
+	position: relative;
+	margin: 0 40px ;
 }
 

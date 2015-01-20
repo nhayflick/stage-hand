@@ -12,7 +12,9 @@
 <body>
   <div class="body-wrapper">
     <%= render :partial => 'layouts/navbar' %>
-    <p class="notice"><%= notice %></p>
+    <% if notice %>
+      <div class="alert alert-info"><%= notice %></div>
+    <% end %>
     <p class="alert"><%= alert %></p>
 
 

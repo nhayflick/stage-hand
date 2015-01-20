@@ -7,9 +7,9 @@ class ListingsController < ApplicationController
   # GET /listings.json
   def index
     if params[:zipcode] && params[:zipcode].length > 0 && params[:category].length > 0
-      @listings = Listing.joins(:user).near(params[:zipcode], 50).where(:category => params[:category]).includes(:listing_images)
+      @listings = Listing.joins(:user).near(params[:zipcode], 1000).where(:category => params[:category]).includes(:listing_images)
     elsif params[:zipcode] && params[:zipcode].length > 0
-       @listings = Listing.joins(:user).near(params[:zipcode], 50)
+       @listings = Listing.joins(:user).near(params[:zipcode], 1000)
     elsif params[:category] && params[:category].length > 0
       @listings = Listing.where(:category => params[:category])
     else
@@ -20,6 +20,9 @@ class ListingsController < ApplicationController
   # GET /listings/1
   # GET /listings/1.json
   def show
+    if Rails.env.development?
+      flash.now[:notice] = "Use Credit Card #4111111111111111, Secutity Code 123 and any valid expiration date to simulate a succesful card."
+    end
     if current_user && @listing.user != current_user
       if current_user.bookings.where(listing_id: @listing.id,
           :state => ['requested','accepted','paid','started','credited']

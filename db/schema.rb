@@ -99,6 +99,7 @@ ActiveRecord::Schema.define(version: 20131216063010) do
     t.float    "longitude"
     t.string   "address"
     t.integer  "zipcode"
+    t.integer  "soundcloudID"
     t.string   "provider"
     t.string   "uid"
     t.string   "name"
@@ -109,7 +110,6 @@ ActiveRecord::Schema.define(version: 20131216063010) do
     t.string   "facebook_url"
     t.string   "city"
     t.string   "state"
-    t.integer  "soundcloudID"
     t.string   "bank_account_uri"
     t.string   "customer_uri"
   end

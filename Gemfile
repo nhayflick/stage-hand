@@ -55,7 +55,7 @@ end
 # gem 'capistrano', group: :development
 
 # Use debugger
-gem 'debugger', group: [:development, :test]
+gem 'byebug', group: [:development, :test]
 
 gem 'devise'
 gem 'omniauth'
@@ -65,7 +65,6 @@ gem 'paperclip'
 gem 'aws-sdk'
 gem 'squeel'
 gem 'state_machine'
-gem 'wepay'
 gem 'cells'
 gem 'geocoder'
 gem 'ransack'
@@ -80,4 +79,4 @@ gem 'american_date'
 gem 'balanced'
 
 # Ruby 2 w00t
-ruby '2.0.0'
+ruby '2.2.0'

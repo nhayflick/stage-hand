@@ -14,4 +14,5 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.for(:account_update) << :avatar
     devise_parameter_sanitizer.for(:account_update) << :avatar_file_name
   end
+
 end

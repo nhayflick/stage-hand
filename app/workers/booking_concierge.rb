@@ -12,13 +12,13 @@ class BookingConcierge
 
   def perform(last_occurrence, current_occurrence)
     Booking.where(start_date: Date.today, state: 'paid').each do |booking|
-        booking.send_booking_reminder_email
+        booking.start
     end
     Booking.where(start_date: 2.days.ago, state: 'started').each do |booking|
-        booking.pay_owner
+        booking.credit
     end
     Booking.where(end_date: 2.days.ago, state: 'credited').each do |booking|
-        booking.settle_deposit
+        booking.settle
     end
   end
 end

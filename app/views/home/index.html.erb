@@ -1,8 +1,8 @@
+<!-- Main Splash Container -->
 <div class="splash-panel-1">
-</div>
-<center>
+	<!-- Search Box -->
 	<div class="home-search">
-		<h2> Find some gear:</h2>
+		<h2 class="splash-text"> Find some gear:</h2>
 		<%= form_tag listings_path, :method => 'get', :class => 'form-inline' do %>  
 		  <div class="search-container well">  
 		  	<div class="form-group">
@@ -17,8 +17,12 @@
 		  </div>  
 		<% end %>
 	</div>
-</center>
-<div class="splash-panel-3">
-	Artist-only gear &amp; instrument rental community.<br>
-	Launching January 2014.
+	<!-- Bottom text container -->
+	<div class="splash-panel-3 hidden-xs">
+		Peer-to-peer instrument rentals for musicians.
+	</div>
 </div>
+<!-- Site Footer -->
+<footer class="footer">
+   <p>Built by <a href="https://github.com/nhayflick/">Nathan Hayflick.</a></p>
+</footer>
