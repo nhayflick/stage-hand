@@ -61,7 +61,7 @@ class UsersController < ApplicationController
 
   # GET /users/1/add_balanced_account
   def add_balanced_account
-    if Rails.env.development?
+    if Rails.env.production?
       flash.now[:notice] = "Use Bank Account #8887776665555 and Routing #321174851 to test the booking system."
     end
   end

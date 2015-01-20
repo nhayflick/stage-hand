@@ -20,7 +20,7 @@ class ListingsController < ApplicationController
   # GET /listings/1
   # GET /listings/1.json
   def show
-    if Rails.env.development?
+    if Rails.env.production?
       flash.now[:notice] = "Use Credit Card #4111111111111111, Secutity Code 123 and any valid expiration date to simulate a succesful card."
     end
     if current_user && @listing.user != current_user
