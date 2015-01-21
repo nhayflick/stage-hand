@@ -6,11 +6,13 @@ class ListingsController < ApplicationController
   # GET /listings
   # GET /listings.json
   def index
-    if params[:zipcode] && params[:zipcode].length > 0 && params[:category].length > 0
-      @listings = Listing.joins(:user).near(params[:zipcode], 1000).where(:category => params[:category]).includes(:listing_images)
-    elsif params[:zipcode] && params[:zipcode].length > 0
-       @listings = Listing.joins(:user).near(params[:zipcode], 1000)
-    elsif params[:category] && params[:category].length > 0
+    # TODO: Fix Search
+    # if params[:zipcode] && params[:zipcode].length > 0 && params[:category].length > 0
+    #   @listings = Listing.joins(:user).near(params[:zipcode], 1000).where(:category => params[:category]).includes(:listing_images)
+    # elsif params[:zipcode] && params[:zipcode].length > 0
+    #    @listings = Listing.joins(:user).near(params[:zipcode], 1000)
+    # elsif 
+    if params[:category] && params[:category].length > 0
       @listings = Listing.where(:category => params[:category])
     else
       @listings = Listing.all
@@ -21,7 +23,7 @@ class ListingsController < ApplicationController
   # GET /listings/1.json
   def show
     if Rails.env.staging?
-      flash.now[:notice] = "Use Credit Card #4111111111111111, Secutity Code 123 and any valid expiration date to simulate a succesful card."
+      flash.now[:notice] = "Use Credit Card #4111111111111111, Security Code 123 and any valid expiration date to simulate a succesful card."
     end
     if current_user && @listing.user != current_user
       if current_user.bookings.where(listing_id: @listing.id,

@@ -70,6 +70,41 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+.btn-scenius-info {
+  background-color: hsl(199, 67%, 22%) !important;
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#2385b2", endColorstr="#12455d");
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#2385b2), to(#12455d));
+  background-image: -moz-linear-gradient(top, #2385b2, #12455d);
+  background-image: -ms-linear-gradient(top, #2385b2, #12455d);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #2385b2), color-stop(100%, #12455d));
+  background-image: -webkit-linear-gradient(top, #2385b2, #12455d);
+  background-image: -o-linear-gradient(top, #2385b2, #12455d);
+  background-image: linear-gradient(#2385b2, #12455d);
+  border-color: #12455d #12455d hsl(199, 67%, 17%);
+  color: #fff !important;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.33);
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn-scenius-danger {
+  background-color: hsl(9, 67%, 24%) !important;
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#bb3b25", endColorstr="#662014");
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#bb3b25), to(#662014));
+  background-image: -moz-linear-gradient(top, #bb3b25, #662014);
+  background-image: -ms-linear-gradient(top, #bb3b25, #662014);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #bb3b25), color-stop(100%, #662014));
+  background-image: -webkit-linear-gradient(top, #bb3b25, #662014);
+  background-image: -o-linear-gradient(top, #bb3b25, #662014);
+  background-image: linear-gradient(#bb3b25, #662014);
+  border-color: #662014 #662014 hsl(9, 67%, 19%);
+  color: #fff !important;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.33);
+  -webkit-font-smoothing: antialiased;
+}
+
+
 .btn-facebook {
 	background-color: #3B5998;
 	color: white;

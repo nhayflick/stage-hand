@@ -44,8 +44,8 @@
               <span class="pull-right form-buttons">
                 <%= listing.category %>
                 <% if listing.user == current_user %>
-                  <%= link_to 'Edit', edit_listing_path(listing), :class => 'btn btn-info' %>
-                  <%= link_to 'Destroy', listing, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-warning' %>
+                  <%= link_to 'Edit', edit_listing_path(listing), :class => 'btn btn-scenius-info' %>
+                  <%= link_to 'Destroy', listing, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-scenius-danger' %>
                 <% else %>
                   <%= link_to "RENT", listing, :class => 'btn btn-scenius' %>
                 <% end %>

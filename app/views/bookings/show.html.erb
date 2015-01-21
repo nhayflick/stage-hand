@@ -31,7 +31,7 @@
           <%= render './replies/index' %>
       <% end %>
         <div style="padding: 0 30%;">
-          <%= link_to 'Reply', new_booking_reply_path(@booking), :class => "btn btn-info btn-large btn-block" %><br />
+          <%= link_to 'Reply', new_booking_reply_path(@booking), :class => "btn btn-scenius-info btn-large btn-block" %><br />
           <% if @booking.state == 'accepted' || @booking.state == 'paid' %>
             <%= form_tag booking_path(@booking), method: :patch do %>
               <%= hidden_field_tag 'booking[state]', 'cancel' %>
