@@ -38,11 +38,14 @@
      <% @listings.each do |listing| %>
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h4>
-            <span style="font-family: 'Ubuntu', sans-serif;">
-              <%= listing.name %> / $<%= listing.rate %> <light>each day</light>
-              <span class="pull-right form-buttons">
-                <%= listing.category %>
+            <spans>
+              <span class="pull-lefts cenius-brand-font">
+                <h4>
+                  <%= listing.name %> / $<%= listing.rate %> <light>each day</light>
+                  <span class="label label-default"><%= listing.category %></span>
+                </h4>
+              </span>
+              <span class="pull-right form-buttons scenius-brand-font">
                 <% if listing.user == current_user %>
                   <%= link_to 'Edit', edit_listing_path(listing), :class => 'btn btn-scenius-info' %>
                   <%= link_to 'Destroy', listing, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-scenius-danger' %>
@@ -50,6 +53,7 @@
                   <%= link_to "RENT", listing, :class => 'btn btn-scenius' %>
                 <% end %>
               </span>
+              <div class="clearfix"></div>
             </span>
           </h4>
         </div>

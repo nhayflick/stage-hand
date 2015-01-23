@@ -23,7 +23,7 @@
               <ul id="notifications-dropdown" class="dropdown-menu">
               </ul>
             </li>
-            <li><%= link_to 'My Gear', listings_path(@user) %> </li>
+            <li><%= link_to 'Gear', listings_path(@user) %> </li>
             <li><%= link_to 'My Bookings', bookings_path(@user) %> </li>
             <li><%= link_to 'Sign out', destroy_user_session_path, :method => :delete %></li>
           <% else %>
